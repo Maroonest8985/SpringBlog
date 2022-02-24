@@ -5,7 +5,9 @@ $(function(){
         $("#navbarAbout").addClass("active");
     }else if(index === "contact"){
         $("#navbarContact").addClass("active");
-    }else{
+    }else if(index === "blog"){
         $("#navbarBlog").addClass("active");
+    }else{
+        $("#navbarHome").addClass("active");
     }
 });
