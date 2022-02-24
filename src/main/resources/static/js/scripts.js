@@ -1,13 +1,12 @@
 $(function(){
-    if(index === "home"){
-        $("#navbarHome").addClass("active");
-    }else if(index === "about"){
-        $("#navbarAbout").addClass("active");
-    }else if(index === "contact"){
-        $("#navbarContact").addClass("active");
-    }else if(index === "blog"){
-        $("#navbarBlog").addClass("active");
-    }else{
-        $("#navbarHome").addClass("active");
+    var navbarContainer = document.getElementById("navbarSupportedContent");
+    var navbarBtn = navbarContainer.getElementsByClassName("nav-link");
+    for(i=0; i< navbarBtn.length; i++){
+        navbarBtn[i].addEventListener('click', function(){
+                var current = document.getElementsByClassName("active");
+                current[0].className = current[0].className.replace(" active");
+                this.className += " active";
+            }
+        );
     }
-});
+})
