@@ -12,19 +12,118 @@
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/1691a4cac2.js" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script> <!---fontawesome CDN--->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
 </head>
 <script>
     var index = "[[${navbar}]]";
+
+    //    $(function(){
+  //     if(isDark == 0){//isDark가 0이면
+           //do Nothing
+    //   }else{
+
+      // }
+    //});
+
+    $(function(){
+        if($.cookie('isDark') == 1) { //darkmode on
+            $("body").removeClass("bg-light");
+            $("header").removeClass("bg-light");
+
+            $("body").toggleClass("bg-dark");
+            $("header").toggleClass("bg-dark");
+            $("#darkmodeBtn").toggleClass(" active");
+            $("header").toggleClass("font-darkmode");
+            $("body").toggleClass("font-darkmode");
+            $("footer").toggleClass("font-darkmode");
+            $(".card").each(function() {
+                $(this).toggleClass("card-darkmode");
+            });
+       }else if($.cookie('isDark') == 0){ //darkmode off
+           $("body").removeClass("bg-dark");
+           $("header").removeClass("bg-dark");
+
+           $("body").toggleClass("bg-light");
+           $("header").toggleClass("bg-light");
+           $("header").removeClass("font-darkmode");
+           $("body").removeClass("font-darkmode");
+           $("footer").removeClass("font-darkmode");
+           $("#darkmodeBtn").removeClass(" active");
+            $(".card").each(function() {
+                $(this).removeClass("card-darkmode");
+            });
+       }else{
+           $("body").toggleClass("bg-light");
+           $("header").toggleClass("bg-light");
+           $("header").removeClass("font-darkmode");
+            $("body").removeClass("font-darkmode");
+            $("footer").removeClass("font-darkmode");
+           $("#darkmodeBtn").removeClass(" active");
+            $(".card").each(function() {
+                $(this).removeClass("card-darkmode");
+            });
+        }
+    });
+    $(function(){
+        $("#darkmodeBtn").click(function(e){
+            var card = document.getElementsByClassName("card");
+            if($.cookie('isDark') ==0){ //darkmode off일때
+                $.removeCookie('isDark');
+                $.cookie('isDark', '1', { expires: 7, path: '/'});//darkmode on
+                $("body").removeClass("bg-light");
+                $("header").removeClass("bg-light");
+
+                $("body").toggleClass("bg-dark", 200, "swing");
+                $("#darkmodeBtn").toggleClass(" active", 200, "swing");
+                $("header").toggleClass("font-darkmode");
+                $("header").toggleClass("bg-dark", 200, "swing");
+                $("body").toggleClass("font-darkmode");
+                $("footer").toggleClass("font-darkmode");
+
+                $(".card").each(function() {
+                    $(this).toggleClass("card-darkmode");
+                });
+            }else if($.cookie('isDark') == 1){
+                $.removeCookie('isDark');
+                $.cookie('isDark', '0', {expires: 7, path: '/'}); //darkmode off
+                $("body").removeClass("bg-dark");
+                $("header").removeClass("bg-dark");
+
+                $("body").toggleClass("bg-light", 200, "swing");
+                $("header").removeClass("font-darkmode");
+                $("body").removeClass("font-darkmode");
+                $("footer").removeClass("font-darkmode");
+                $(".card").each(function() {
+                    $(this).removeClass("card-darkmode");
+                });
+                $("#darkmodeBtn").removeClass(" active", 200, "swing");
+                $("header").toggleClass("bg-light", 200, "swing");
+            }else{
+                $("body").toggleClass("bg-light", 200, "swing");
+                $("header").removeClass("font-darkmode");
+                $("body").removeClass("font-darkmode");
+                $("footer").removeClass("font-darkmode");
+                $(".card").each(function() {
+                    $(this).removeClass("card-darkmode");
+                });
+                $("#darkmodeBtn").removeClass(" active", 200, "swing");
+                $("header").toggleClass("bg-light", 200, "swing");
+            }
+        });
+    })
 </script>
-<body>
 <!-- Responsive navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="./home">Maroonest's BLOG</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a id="darkmodeBtn" class="nav-link"><i class="fas fa-moon"></i></a></li>
                 <li class="nav-item"><a id="navbarHome" class="nav-link" href="./home">Home</a></li>
                 <li class="nav-item"><a id="navbarAbout"  class="nav-link" href="./about">About</a></li>
                 <li class="nav-item"><a id="navbarContact" class="nav-link" href="./contact">Contact</a></li>
@@ -35,7 +134,7 @@
 </nav>
 
 <!-- Page header with logo and tagline-->
-<header class="py-5 bg-light border-bottom mb-4">
+<header class="py-5 border-bottom mb-4">
     <div class="container">
         <div class="text-center my-5">
             <h1 class="fw-bolder">Welcome to Blog Home!</h1>
@@ -44,5 +143,4 @@
         </div>
     </div>
 </header>
-</body>
 </html>
