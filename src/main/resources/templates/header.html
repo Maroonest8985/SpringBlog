@@ -28,9 +28,8 @@
 
       // }
     //});
-
     $(function(){
-        if($.cookie('isDark') == 1) { //darkmode on
+        if(localStorage.getItem("isDark") == 1) { //darkmode on
             $("body").removeClass("bg-light");
             $("header").removeClass("bg-light");
 
@@ -43,7 +42,7 @@
             $(".card").each(function() {
                 $(this).toggleClass("card-darkmode");
             });
-       }else if($.cookie('isDark') == 0){ //darkmode off
+       }else if(localStorage.getItem("isDark") == 0){ //darkmode off
            $("body").removeClass("bg-dark");
            $("header").removeClass("bg-dark");
 
@@ -66,14 +65,15 @@
             $(".card").each(function() {
                 $(this).removeClass("card-darkmode");
             });
+            localStorage.setItem("isDark", "0");
         }
     });
+
     $(function(){
         $("#darkmodeBtn").click(function(e){
-            var card = document.getElementsByClassName("card");
-            if($.cookie('isDark') ==0){ //darkmode off일때
-                $.removeCookie('isDark');
-                $.cookie('isDark', '1', { expires: 7, path: '/'});//darkmode on
+            if(localStorage.getItem("isDark") == 0){ //darkmode off일때
+                localStorage.clear();
+                localStorage.setItem("isDark", "1");//darkmode on
                 $("body").removeClass("bg-light");
                 $("header").removeClass("bg-light");
 
@@ -87,22 +87,12 @@
                 $(".card").each(function() {
                     $(this).toggleClass("card-darkmode");
                 });
-            }else if($.cookie('isDark') == 1){
-                $.removeCookie('isDark');
-                $.cookie('isDark', '0', {expires: 7, path: '/'}); //darkmode off
+            }else if(localStorage.getItem("isDark") == 1){
+                localStorage.clear();
+                localStorage.setItem("isDark", "0");//darkmode off
                 $("body").removeClass("bg-dark");
                 $("header").removeClass("bg-dark");
 
-                $("body").toggleClass("bg-light", 200, "swing");
-                $("header").removeClass("font-darkmode");
-                $("body").removeClass("font-darkmode");
-                $("footer").removeClass("font-darkmode");
-                $(".card").each(function() {
-                    $(this).removeClass("card-darkmode");
-                });
-                $("#darkmodeBtn").removeClass(" active", 200, "swing");
-                $("header").toggleClass("bg-light", 200, "swing");
-            }else{
                 $("body").toggleClass("bg-light", 200, "swing");
                 $("header").removeClass("font-darkmode");
                 $("body").removeClass("font-darkmode");
