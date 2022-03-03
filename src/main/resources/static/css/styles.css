@@ -582,11 +582,16 @@ progress {
 }
 
 .bg-darkmode{
-  background : #212529;
+  background-color : #212529;
 }
 
 .font-darkmode{
   color : white;
+}
+
+.card-darkmode {
+  background-color: #212529;
+  border: 1px solid grey !important;
 }
 
 .blockquote {
@@ -4522,20 +4527,8 @@ textarea.form-control-lg {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
-}
-.card-darkmode {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #212529 !important;
-  background-clip: border-box;
-  border: 1px solid grey !important;
   border-radius: 0.25rem;
 }
 .card > hr {

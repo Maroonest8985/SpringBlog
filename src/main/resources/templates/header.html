@@ -28,80 +28,41 @@
 
       // }
     //});
-    $(function(){
-        if(localStorage.getItem("isDark") == 1) { //darkmode on
-            $("body").removeClass("bg-light");
-            $("header").removeClass("bg-light");
 
-            $("body").toggleClass("bg-dark");
-            $("header").toggleClass("bg-dark");
-            $("#darkmodeBtn").toggleClass(" active");
-            $("header").toggleClass("font-darkmode");
-            $("body").toggleClass("font-darkmode");
-            $("footer").toggleClass("font-darkmode");
+
+    $(function(){
+        var isDark = localStorage.getItem("isDark");
+        if(isDark == 1){//darkmode on when page loaded
+            $("body").toggleClass("bg-darkmode font-darkmode");
+            $("header").toggleClass("bg-darkmode font-darkmode");
+            $("#darkmodeBtn").toggleClass("active");
             $(".card").each(function() {
                 $(this).toggleClass("card-darkmode");
             });
-       }else if(localStorage.getItem("isDark") == 0){ //darkmode off
-           $("body").removeClass("bg-dark");
-           $("header").removeClass("bg-dark");
-
-           $("body").toggleClass("bg-light");
-           $("header").toggleClass("bg-light");
-           $("header").removeClass("font-darkmode");
-           $("body").removeClass("font-darkmode");
-           $("footer").removeClass("font-darkmode");
-           $("#darkmodeBtn").removeClass(" active");
-            $(".card").each(function() {
-                $(this).removeClass("card-darkmode");
-            });
-       }else{
-           $("body").toggleClass("bg-light");
-           $("header").toggleClass("bg-light");
-           $("header").removeClass("font-darkmode");
-            $("body").removeClass("font-darkmode");
-            $("footer").removeClass("font-darkmode");
-           $("#darkmodeBtn").removeClass(" active");
-            $(".card").each(function() {
-                $(this).removeClass("card-darkmode");
-            });
-            localStorage.setItem("isDark", "0");
+        }else{
+            //do nothing
         }
-    });
 
-    $(function(){
         $("#darkmodeBtn").click(function(e){
-            if(localStorage.getItem("isDark") == 0){ //darkmode off일때
+            var isDark = localStorage.getItem("isDark");
+            if(isDark == 0){ //click시 darkmode off일때
                 localStorage.clear();
                 localStorage.setItem("isDark", "1");//darkmode on
-                $("body").removeClass("bg-light");
-                $("header").removeClass("bg-light");
-
-                $("body").toggleClass("bg-dark", 200, "swing");
-                $("#darkmodeBtn").toggleClass(" active", 200, "swing");
-                $("header").toggleClass("font-darkmode");
-                $("header").toggleClass("bg-dark", 200, "swing");
-                $("body").toggleClass("font-darkmode");
-                $("footer").toggleClass("font-darkmode");
-
+                $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
+                $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
+                $("#darkmodeBtn").toggleClass("active", 400, "swing");
                 $(".card").each(function() {
-                    $(this).toggleClass("card-darkmode");
+                    $(this).toggleClass("card-darkmode", 400, "swing");
                 });
-            }else if(localStorage.getItem("isDark") == 1){
+            }else if(isDark == 1){
                 localStorage.clear();
                 localStorage.setItem("isDark", "0");//darkmode off
-                $("body").removeClass("bg-dark");
-                $("header").removeClass("bg-dark");
-
-                $("body").toggleClass("bg-light", 200, "swing");
-                $("header").removeClass("font-darkmode");
-                $("body").removeClass("font-darkmode");
-                $("footer").removeClass("font-darkmode");
+                $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
+                $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
                 $(".card").each(function() {
-                    $(this).removeClass("card-darkmode");
+                    $(this).toggleClass("card-darkmode", 400, "swing");
                 });
-                $("#darkmodeBtn").removeClass(" active", 200, "swing");
-                $("header").toggleClass("bg-light", 200, "swing");
+                $("#darkmodeBtn").toggleClass("active", 400, "swing");
             }
         });
     })
