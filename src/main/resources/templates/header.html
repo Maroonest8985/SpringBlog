@@ -18,72 +18,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
 </head>
-<script>
-    var index = "[[${navbar}]]";
-
-    //    $(function(){
-  //     if(isDark == 0){//isDark가 0이면
-           //do Nothing
-    //   }else{
-
-      // }
-    //});
-
-
-    $(function(){
-        var isDark = localStorage.getItem("isDark");
-        if(isDark == 1){//darkmode on when page loaded
-            $("body").toggleClass("bg-darkmode font-darkmode");
-            $("header").toggleClass("bg-darkmode font-darkmode");
-            $("#darkmodeBtn").toggleClass("active");
-            $(".card").each(function() {
-                $(this).toggleClass("card-darkmode");
-            });
-        }else{
-            //do nothing
-        }
-
-        $("#darkmodeBtn").click(function(e){
-            var isDark = localStorage.getItem("isDark");
-            if(isDark == 0){ //click시 darkmode off일때
-                localStorage.clear();
-                localStorage.setItem("isDark", "1");//darkmode on
-                $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
-                $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
-                $("#darkmodeBtn").toggleClass("active", 400, "swing");
-                $(".card").each(function() {
-                    $(this).toggleClass("card-darkmode", 400, "swing");
-                });
-            }else if(isDark == 1){
-                localStorage.clear();
-                localStorage.setItem("isDark", "0");//darkmode off
-                $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
-                $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
-                $(".card").each(function() {
-                    $(this).toggleClass("card-darkmode", 400, "swing");
-                });
-                $("#darkmodeBtn").toggleClass("active", 400, "swing");
-            }
-        });
-    })
-</script>
 <!-- Responsive navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="./home">Maroonest's BLOG</a>
+        <a id="darkmodeBtn" class="btn-darkmode"><i class="fas fa-moon"></i></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <a class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a id="darkmodeBtn" class="nav-link"><i class="fas fa-moon"></i></a></li>
                 <li class="nav-item"><a id="navbarHome" class="nav-link" href="./home">Home</a></li>
                 <li class="nav-item"><a id="navbarAbout"  class="nav-link" href="./about">About</a></li>
                 <li class="nav-item"><a id="navbarContact" class="nav-link" href="./contact">Contact</a></li>
                 <li class="nav-item"><a id="navbarBlog" class="nav-link" href="./blog">Blog</a></li>
             </ul>
         </div>
+        </div>
     </div>
 </nav>
-
 <!-- Page header with logo and tagline-->
 <header class="py-5 border-bottom mb-4">
     <div class="container">

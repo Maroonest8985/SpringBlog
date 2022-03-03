@@ -24,6 +24,7 @@ public class HomeController {
         model.addAttribute("navbar", "home");
         return "index";
     }
+
     @GetMapping("/about")
     public String about(Model model){
         model.addAttribute("data", "this is about page");
