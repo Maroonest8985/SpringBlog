@@ -1,19 +1,21 @@
+
 $(function(){
-    if(index === "home"){
+    var index = location.pathname;
+    var navbarIndex = index.substring(1);
+    if(navbarIndex === "home"){
         $("#navbarHome").addClass("active");
-    }else if(index === "about"){
+    }else if(navbarIndex === "about"){
         $("#navbarAbout").addClass("active");
-    }else if(index === "contact"){
+    }else if(navbarIndex === "contact"){
         $("#navbarContact").addClass("active");
-    }else if(index === "blog"){
+    }else if(navbarIndex === "blog"){
         $("#navbarBlog").addClass("active");
     }else {
         $("#navbarHome").addClass("active");
     }
-});
-var index = "[[${navbar}]]";//navbar indicator
-$(function(){
-    localStorage.setItem("isDark", 0);
+    //navbar indicator toggler
+    //--------------------------------------------------------------------------------
+
     var isDark = localStorage.getItem("isDark");
     if(isDark == 1){//darkmode on when page loaded
         $("body").toggleClass("bg-darkmode font-darkmode");
@@ -47,4 +49,8 @@ $(function(){
             $("#darkmodeBtn").toggleClass("active", 400, "swing");
         }
     });
+    //darkmode toggler script
+    //--------------------------------------------------------------------------------
+
+
 })
