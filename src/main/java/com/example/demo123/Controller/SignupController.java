@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class SignupController {
-
     @Autowired
     SqlSession ss;
 

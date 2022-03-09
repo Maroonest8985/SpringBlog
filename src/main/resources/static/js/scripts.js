@@ -8,8 +8,8 @@ $(function(){
         $("#navbarAbout").addClass("active");
     }else if(index.indexOf("contact") != -1){
         $("#navbarContact").addClass("active");
-    }else if(index.indexOf("blog") != -1){
-        $("#navbarBlog").addClass("active");
+    }else if(index.indexOf("post") != -1){
+        $("#navbarPost").addClass("active");
     }else {
         $("#navbarHome").addClass("active");
     }
