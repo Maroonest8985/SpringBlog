@@ -581,6 +581,10 @@ progress {
   text-transform: uppercase;
 }
 
+.modal-darkmode{
+  background-color: #212529 !important;
+}
+
 .bg-darkmode{
   background-color : #212529;
 }
