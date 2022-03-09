@@ -15,9 +15,10 @@ $(function(){
     }
     //navbar indicator toggler
     //--------------------------------------------------------------------------------
-
     var isDark = localStorage.getItem("isDark");
-    if(isDark == 1){//darkmode on when page loaded
+    if(isDark == null){
+        var isDark = localStorage.setItem("isDark", 0);
+    }else if(isDark == 1){//darkmode on when page loaded
         $("body").toggleClass("bg-darkmode font-darkmode");
         $("header").toggleClass("bg-darkmode font-darkmode");
         $("#darkmodeBtn").toggleClass("active");
