@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.apache.ibatis.session.SqlSession;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -18,8 +19,14 @@ public class SignupController {
     SqlSession ss;
 
     @PostMapping("/signup")
-    public ModelAndView signupForm(@ModelAttribute("signupDTO") SignupDTO signupDTO, HttpSession session){
-        SignupDAO signupDAO = null;
+    public ModelAndView signupForm(HttpSession session, HttpServletRequest request){
+        SignupDTO signupDTO = new SignupDTO();
+        String email = request.getParameter("email");
+        String id = request.getParameter("id");
+        String pwd = request.getParameter("pwd");
+        signupDTO.setEmail(email);
+        signupDTO.setId(id);
+        signupDTO.setPwd(pwd);
         ModelAndView mav = new ModelAndView("redirect:/signupDone");
         session.setAttribute("memberID", signupDTO.getId());
         ss.insert("insertMember", signupDTO);

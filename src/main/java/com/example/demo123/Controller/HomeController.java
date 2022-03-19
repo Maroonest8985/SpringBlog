@@ -34,6 +34,10 @@ public class HomeController {
 
         return "index";
     }
+    @GetMapping("/error")
+    public String error(){
+        return "error";
+    }
 }
 
 

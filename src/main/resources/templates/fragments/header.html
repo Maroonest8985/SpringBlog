@@ -38,7 +38,9 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a id="navbarLogin" class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+                <li th:if="${session.member_id}" class="nav-item"><a class="nav-link" href="./memberinfo">Welcome, [[${session.member_id}]]</a></li>
+                <li th:if="${session.member_id}" class="nav-item"><a class="nav-link" href="./logout">Logout</a></li>
+                <li th:if="!${session.member_id}" class="nav-item"><a id="navbarLogin" class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
                 <li class="nav-item"><a id="navbarHome" class="nav-link" href="./home">Home</a></li>
                 <li class="nav-item"><a id="navbarAbout"  class="nav-link" href="./about">About</a></li>
                 <li class="nav-item"><a id="navbarContact" class="nav-link" href="./contact">Contact</a></li>
@@ -66,6 +68,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Login</h5>
                 <button id="btnLoginModalClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form action="/login" method="post">
             <div class="modal-body">
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="min-width : 45px;" ><i class="fas fa-id-card"></i></span>
@@ -78,9 +81,10 @@
             </div>
             <div class="modal-footer">
                 <button id="btnSignup" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#staticBackdrop">Sign Up</button>
-                <button type="button" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </div>
         </div>
+        </form>
     </div>
 </div>
 <!-- Modal -->
@@ -91,25 +95,25 @@
                 <h5 class="modal-title" id="staticBackdropLabel">Sign Up</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="signup" method="post">
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="emailInput" class="form-label">Email address</label>
-                    <input th:field="${signupDTO.email}" type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+            <form action="/signup" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="emailInput" class="form-label">Email address</label>
+                        <input name="email" type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="idInput" class="form-label">ID</label>
+                        <input name="id" type="text" class="form-control" id="idInput" placeholder="Enter your ID...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pwdInput" class="form-label">PWD</label>
+                        <input name="pwd" type="text" class="form-control" id="pwdInput" placeholder="Enter your PWD...">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="idInput" class="form-label">ID</label>
-                    <input th:field="${signupDTO.id}" type="text" class="form-control" id="idInput" placeholder="Enter your ID...">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Sign Up!</button>
                 </div>
-                <div class="mb-3">
-                    <label for="pwdInput" class="form-label">PWD</label>
-                    <input th:field="${signupDTO.pwd}" type="text" class="form-control" id="pwdInput" placeholder="Enter your PWD...">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Sign Up!</button>
-            </div>
             </form>
         </div>
     </div>
