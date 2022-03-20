@@ -37,6 +37,10 @@ public class LoginController{
             String m_email = memberDTO.getEmail();
             String m_pwd = memberDTO.getPwd();
             session.setAttribute("member_id", m_id);
+            session.setAttribute("member_no", m_no);
+            session.setAttribute("member_email", m_email);
+            session.setAttribute("member_pwd", m_pwd);
+
             return mav;
         }else{
             return maverr;
