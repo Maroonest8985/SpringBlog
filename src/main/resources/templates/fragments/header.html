@@ -95,7 +95,7 @@
                 <h5 class="modal-title" id="staticBackdropLabel">Sign Up</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="./signup" method="post">
+            <form id="signupForm" action="./signup" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="emailInput" class="form-label">Email address</label>
@@ -103,7 +103,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="idInput" class="form-label">ID</label>
-                        <input name="id" type="text" class="form-control" id="idInput" placeholder="Enter your ID...">
+                        <div class="input-group">
+                            <input name="id" type="text" class="form-control" id="idInput" placeholder="Enter your ID...">
+                            <button id="idCheck" type="button" class="btn btn-primary">중복체크</button>
+                        </div>
+                    </div>
+                    <div id="checkIdResult" class="mb-3">
+
                     </div>
                     <div class="mb-3">
                         <label for="pwdInput" class="form-label">PWD</label>
@@ -111,8 +117,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <div id="signupMsg"></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Sign Up!</button>
+                    <button id="signupSubmit" type="button" class="btn btn-primary">Sign Up!</button>
                 </div>
             </form>
         </div>

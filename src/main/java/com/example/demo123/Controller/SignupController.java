@@ -42,4 +42,15 @@ public class SignupController {
         return mav;
     }
 
+    @PostMapping("/checkid")
+    @ResponseBody
+    public int checkid(HttpServletRequest request){
+        String id = request.getParameter("userid");
+        if(ss.selectOne("checkId", id) != null){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
 }

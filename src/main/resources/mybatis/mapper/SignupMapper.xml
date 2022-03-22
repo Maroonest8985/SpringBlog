@@ -4,13 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo123.DAO.SignupDAO">
-
     <insert id="insertMember">
         insert into member
         (email, id, pwd)
         values
         (#{email},#{id},#{pwd});
     </insert>
-
+    <select id="checkId" resultType="string">
+        select id from member
+        where id = #{id};
+    </select>
 
 </mapper>

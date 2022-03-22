@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface SignupDAO {
     int insertMember(SignupDTO signupDTO);
+    void checkId(String id);
 }

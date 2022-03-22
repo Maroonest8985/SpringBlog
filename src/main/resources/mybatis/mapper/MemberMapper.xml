@@ -7,8 +7,12 @@
 
     <select id="getList" resultType="map">
         select * from member
-        where no = #{no};
+        where no = #{no}
     </select>
+    <delete id="deleteMember">
+        delete from member
+        where no = #{no}
+    </delete>
 
 
 </mapper>

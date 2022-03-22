@@ -52,8 +52,47 @@ $(function(){
             });
             $("#darkmodeBtn").toggleClass("active", 400, "swing");
         }
+
+        var isRegistrationOk = 0;
+        $("#idCheck").click(function () {
+            var userid = $("#idInput").val(); // input userid부분의 값
+            $("#checkIdResult").html("<p style='font-size : 12px;'>검색중...</p>");
+            if (userid.length > 1) {
+                $.ajax({
+                    type: 'POST',
+                    data: {userid: userid},// checkid.do?userid=userid 형식
+                    url: "./checkid",
+                    success: function (result) { // 성공하면 function 실행
+                        if (result == 0) {
+                            $("#checkIdResult").html("<p style='font-size : 12px;'>사용중인 아이디입니다.</p>");
+                            isRegistrationOk = 0;
+                        } else if(result ==1){
+                            $("#checkIdResult").html("<p style='font-size : 12px;'>사용 가능한 아이디입니다.</p>");
+                            $("#isValidationOk").html("");
+                            isRegistrationOk = 1;
+                        }else{
+                            $("#checkIdResult").html("<p style='font-size : 12px;'>error</p>");
+                        }
+                    }
+                });
+            } else {
+                $("#checkIdResult").html("<p style='font-size : 12px;'>아이디를 입력해 주세요.</p>");
+            }
+        });
+        $("#signupSubmit").click(function(){
+           if(isRegistrationOk != 0){// checkid 실패시
+               $("#signupMsg").html("<p style='font-size : 12px;'>아이디를 입력해 주세요.</p>");
+           }else{
+               $("#signupForm").submit();
+           }
+        });
     });
     //darkmode toggler script
     //--------------------------------------------------------------------------------
 
 })
+$(function() {
+
+});
+
+
