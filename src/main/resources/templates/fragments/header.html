@@ -68,23 +68,26 @@
                 <h5 class="modal-title" id="exampleModalLabel">Login</h5>
                 <button id="btnLoginModalClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="./login" method="post">
+            <form id="loginForm" action="./login" method="post">
             <div class="modal-body">
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="min-width : 45px;" ><i class="fas fa-id-card"></i></span>
-                    <input type="text" name="id" class="form-control" th:attr="value=${session.memberID}" placeholder="ID" aria-describedby="inputGroup-sizing-default">
+                    <input id="loginIdInput" type="text" name="id" class="form-control" th:attr="value=${session.memberID}" placeholder="ID" aria-describedby="inputGroup-sizing-default">
                 </div>
                 <div class="input-group mb-2">
                     <span class="input-group-text" style="min-width : 45px;" ><i class="fas fa-key"></i></span>
-                    <input type="text" name="pwd" class="form-control" placeholder="PWD" aria-describedby="inputGroup-sizing-default">
+                    <input id="loginPwdInput" type="password" name="pwd" class="form-control" placeholder="PWD" aria-describedby="inputGroup-sizing-default">
                 </div>
             </div>
             <div class="modal-footer">
+                <div id="loginMsg">
+
+                </div>
                 <button id="btnSignup" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#staticBackdrop">Sign Up</button>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button id="btnSignin" type="button" class="btn btn-primary">Login</button>
             </div>
+            </form>
         </div>
-        </form>
     </div>
 </div>
 <!-- Modal -->
@@ -112,7 +115,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="pwdInput" class="form-label">PWD</label>
-                        <input name="pwd" type="text" class="form-control" id="pwdInput" placeholder="Enter your PWD...">
+                        <input name="pwd" type="password" class="form-control" id="pwdInput" placeholder="Enter your PWD...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pwdInput" class="form-label">Repeat PWD</label>
+                        <input name="pwd" type="password" class="form-control" id="pwdInput1" placeholder="Enter your PWD...">
+                    </div>
+                    <div id="checkPwdResult" class="mb-3">
                     </div>
                 </div>
                 <div class="modal-footer">

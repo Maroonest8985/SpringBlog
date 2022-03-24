@@ -83,6 +83,7 @@ $(function(){
                 return 0;
             }
         });
+
     var oldVal;
     $("#idInput").on( "propertychange change keyup paste input", function(){
         var currentVal = $(this).val();
@@ -94,12 +95,47 @@ $(function(){
        $("#checkIdResult").html("<p style='font-size : 12px;'></p>");
     });
 
+    var pwdOk;
+    var oldValPwd1;
+    $("#pwdInput1").on( "propertychange change keyup paste input", function(){
+        var currentVal = $(this).val();
+        if(currentVal == oldValPwd1) {
+            return;
+        }
+        oldValPwd1 = currentVal;
+        var pwd1 = $("#pwdInput").val();
+        if(pwd1 != currentVal){
+            $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일하지 않습니다.</p>");
+            pwdOk = null;
+        }else{
+            $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일합니다.</p>");
+            pwdOk = 1;
+        }
+    });
+
+    var oldValPwd;
+    $("#pwdInput").on( "propertychange change keyup paste input", function(){
+        var currentVal = $(this).val();
+        if(currentVal == oldValPwd) {
+            return;
+        }
+        oldValPwd = currentVal;
+        var pwd = $("#pwdInput1").val();
+        if(pwd != currentVal){
+            $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일하지 않습니다.</p>");
+            pwdOk = null;
+        }else{
+            $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일합니다.</p>");
+            pwdOk = 1;
+        }
+    });
+
     $("#signupSubmit").click(function(){
         var userid = $("#idInput").val(); // input userid부분의 값
         var email = $("#emailInput").val();
         var pwd = $("#pwdInput").val();
-
-        if(userid && email && pwd != null){ //3개가 전부 null 아니면
+        var pwd1 = $("#pwdInput1").val();
+        if(userid && email && pwd && pwdOk != null){ //3개가 전부 null 아니면
             if(idCheckOk == 0){//중복체크 x
                 $("#signupMsg").html("<p style='font-size : 12px;'>아이디 중복체크를 해 주세요.</p>");
             }else{
@@ -112,6 +148,25 @@ $(function(){
 
     //darkmode toggler script
     //--------------------------------------------------------------------------------
+    $("#btnSignin").click(function(){
+        var id = $("#loginIdInput").val();
+        var pwd = $("#loginPwdInput").val();
+
+        if(id && pwd != null){ //둘다 null 아니면
+            $.ajax({
+                type: 'POST',
+                data: {userid: id, password: pwd},
+                url: './checklogin',
+                success: function (result){
+                    if(result == 1){
+                        $("#loginForm").submit();
+                    }else{
+                        $("#loginMsg").html("<p style='font-size : 12px;'>아이디나 비밀번호를 확인해 주세요.</p>");
+                    }
+                }
+            })
+        }
+    })
 
 });
 

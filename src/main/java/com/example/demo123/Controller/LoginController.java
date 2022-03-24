@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +47,25 @@ public class LoginController{
             return maverr;
         }
     }
+
+    @PostMapping("/checklogin")
+    @ResponseBody
+    public int checklogin(HttpServletRequest request){
+        MemberDTO memberDTO = new MemberDTO();
+
+        String id = request.getParameter("userid");
+        String pwd = request.getParameter("password");
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("id", id);
+        map.put("pwd", pwd);
+        memberDTO = ss.selectOne("loginMember", map);
+        if(memberDTO != null){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
     @GetMapping("/logout")
     public ModelAndView logout(HttpSession session){
         ModelAndView mav = new ModelAndView("redirect:/home");
