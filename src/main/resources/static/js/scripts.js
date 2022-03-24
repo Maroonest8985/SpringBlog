@@ -52,10 +52,12 @@ $(function(){
             });
             $("#darkmodeBtn").toggleClass("active", 400, "swing");
         }
+    });
 
-        var isRegistrationOk = 0;
-        $("#idCheck").click(function () {
+    var idCheckOk = 0;
+    $("#idCheck").click(function(){
             var userid = $("#idInput").val(); // input userid부분의 값
+
             $("#checkIdResult").html("<p style='font-size : 12px;'>검색중...</p>");
             if (userid.length > 1) {
                 $.ajax({
@@ -65,33 +67,51 @@ $(function(){
                     success: function (result) { // 성공하면 function 실행
                         if (result == 0) {
                             $("#checkIdResult").html("<p style='font-size : 12px;'>사용중인 아이디입니다.</p>");
-                            isRegistrationOk = 0;
+                            idCheckOk = 0;
                         } else if(result ==1){
                             $("#checkIdResult").html("<p style='font-size : 12px;'>사용 가능한 아이디입니다.</p>");
                             $("#isValidationOk").html("");
-                            isRegistrationOk = 1;
+                            idCheckOk = 1;
                         }else{
                             $("#checkIdResult").html("<p style='font-size : 12px;'>error</p>");
+                            idCheckOk = 0;
                         }
                     }
                 });
             } else {
                 $("#checkIdResult").html("<p style='font-size : 12px;'>아이디를 입력해 주세요.</p>");
+                return 0;
             }
         });
-        $("#signupSubmit").click(function(){
-           if(isRegistrationOk != 0){// checkid 실패시
-               $("#signupMsg").html("<p style='font-size : 12px;'>아이디를 입력해 주세요.</p>");
-           }else{
-               $("#signupForm").submit();
-           }
-        });
+    var oldVal;
+    $("#idInput").on( "propertychange change keyup paste input", function(){
+        var currentVal = $(this).val();
+        if(currentVal == oldVal) {
+            return;
+        }
+        oldVal = currentVal;
+       idCheckOk = 0;
+       $("#checkIdResult").html("<p style='font-size : 12px;'></p>");
     });
+
+    $("#signupSubmit").click(function(){
+        var userid = $("#idInput").val(); // input userid부분의 값
+        var email = $("#emailInput").val();
+        var pwd = $("#pwdInput").val();
+
+        if(userid && email && pwd != null){ //3개가 전부 null 아니면
+            if(idCheckOk == 0){//중복체크 x
+                $("#signupMsg").html("<p style='font-size : 12px;'>아이디 중복체크를 해 주세요.</p>");
+            }else{
+                $("#signupForm").submit();
+            }
+        }else{
+            $("#signupMsg").html("<p style='font-size : 12px;'>모든 항목을 입력해 주세요.</p>");
+        }
+    });
+
     //darkmode toggler script
     //--------------------------------------------------------------------------------
-
-})
-$(function() {
 
 });
 
