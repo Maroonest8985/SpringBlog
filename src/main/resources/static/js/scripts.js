@@ -29,6 +29,7 @@ $(function(){
     }else{
         //do nothing
     }
+
     $("#darkmodeBtn").click(function(e){
         var isDark = localStorage.getItem("isDark");
         if(isDark == 0){ //darkmode disabled when clicking button
@@ -103,14 +104,19 @@ $(function(){
             return;
         }
         oldValPwd1 = currentVal;
+
         var pwd1 = $("#pwdInput").val();
-        if(pwd1 != currentVal){
-            $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일하지 않습니다.</p>");
+        if(currentVal.length < 2){
+            $("#checkPwdResult").html("<p style='font-size : 12px;'></p>");
             pwdOk = null;
-        }else{
-            $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일합니다.</p>");
-            pwdOk = 1;
-        }
+        }else if (pwd1 != currentVal) {
+                $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일하지 않습니다.</p>");
+                pwdOk = null;
+            } else {
+                $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일합니다.</p>");
+                pwdOk = 1;
+            }
+
     });
 
     var oldValPwd;
@@ -121,7 +127,11 @@ $(function(){
         }
         oldValPwd = currentVal;
         var pwd = $("#pwdInput1").val();
-        if(pwd != currentVal){
+
+        if(currentVal.length < 2){
+            $("#checkPwdResult").html("<p style='font-size : 12px;'></p>");
+            pwdOk = null;
+        }else if(pwd != currentVal){
             $("#checkPwdResult").html("<p style='font-size : 12px;'>패스워드가 동일하지 않습니다.</p>");
             pwdOk = null;
         }else{
