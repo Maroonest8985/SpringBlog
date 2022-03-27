@@ -7,7 +7,7 @@
 
     <select id="loginMember" parameterType="hashMap" resultType="com.example.demo123.DTO.MemberDTO">
         select * from member
-        where id = #{id} and pwd = #{pwd}
+        where binary id = #{id} and binary pwd = #{pwd};
     </select>
 
 

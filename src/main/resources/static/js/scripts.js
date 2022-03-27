@@ -23,6 +23,9 @@ $(function(){
         $("header").toggleClass("bg-darkmode font-darkmode");
         $(".modal-content").toggleClass("modal-darkmode font-darkmode");
         $("#darkmodeBtn").toggleClass("active");
+        $("label").each(function(){
+            $(this).addClass("input-font-darkmode", 400, "swing");
+        });
         $(".card").each(function() {
             $(this).toggleClass("card-darkmode");
         });
@@ -37,6 +40,9 @@ $(function(){
             localStorage.setItem("isDark", "1");//darkmode on
             $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
             $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
+            $("label").each(function(){
+                $(this).addClass("input-font-darkmode", 400, "swing");
+            });
             $(".modal-content").toggleClass("modal-darkmode font-darkmode");
             $("#darkmodeBtn").toggleClass("active", 400, "swing");
             $(".card").each(function() {
@@ -47,6 +53,9 @@ $(function(){
             localStorage.setItem("isDark", "0");//darkmode off
             $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
             $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
+            $("label").each(function(){
+                $(this).removeClass("input-font-darkmode", 400, "swing");
+            });
             $(".modal-content").toggleClass("modal-darkmode font-darkmode");
             $(".card").each(function() {
                 $(this).toggleClass("card-darkmode", 400, "swing");
@@ -177,6 +186,9 @@ $(function(){
             })
         }
     })
+
+    //------------------------------------card-text shortener---------------------------
+
 
 });
 

@@ -1,5 +1,8 @@
 package com.example.demo123.Controller;
 
+import com.example.demo123.DTO.PostDTO;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,14 +11,24 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import com.example.demo123.DTO.SignupDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class HomeController {
+    @Autowired
+    SqlSession ss;
+
     @GetMapping("/home")
-    public String home(Model model){
+    public ModelAndView home(PostDTO postDTO, Model model){
         model.addAttribute("data", "this is home");
         model.addAttribute("navbar", "home");
         model.addAttribute("signupDTO", new SignupDTO());
-        return "index";
+        List<PostDTO> arrPostDTO = new ArrayList<>();
+        arrPostDTO = ss.selectList("getListPost");
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("arrPostDTO", arrPostDTO);
+        return mav;
     }
 
     @GetMapping("/about")
@@ -38,6 +51,8 @@ public class HomeController {
     public String error(){
         return "error";
     }
+
+
 }
 
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo123.DAO.PostDAO">
+    <insert id="insertPost">
+        insert into post
+        (title, text, img, member_no)
+        values
+        (#{title}, #{text}, #{img}, #{member_no});
+    </insert>
+
+    <select id="getListPost" resultType="com.example.demo123.DTO.PostDTO">
+        select post.*, member.id as member_name from post
+        left join member on post.member_no = member.no;
+    </select>
+
+    <select id="selectPost" resultType="com.example.demo123.DTO.PostDTO">
+        select post.*, member.id as member_name from post
+        left join member on post.member_no = member.no
+        where post.no=#{no};
+    </select>
+
+
+</mapper>
