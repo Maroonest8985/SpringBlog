@@ -2,6 +2,9 @@ package com.example.demo123.Controller;
 
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionException;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +16,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class MemberController {
     @Autowired
-    SqlSession ss;
+    private SqlSessionFactory sqlSessionFactory;
 
     @GetMapping("/memberinfo")
     public ModelAndView memberInfo(Model model){
@@ -23,13 +26,18 @@ public class MemberController {
 
     @GetMapping("/delete-member")
     public ModelAndView deleteMember(HttpSession session){
+        SqlSession ss = sqlSessionFactory.openSession();
         int no = (int) session.getAttribute("member_no");
-        if(ss.delete("deleteMember", no) > 0){
+        try{
+            ss.delete("deleteMember", no);
+        }catch(SqlSessionException e){
+            e.printStackTrace();
+            ModelAndView mav = new ModelAndView("error");
+            return mav;
+        }finally{
             ModelAndView mav = new ModelAndView("member-delete");
             session.invalidate();
-            return mav;
-        }else{
-            ModelAndView mav = new ModelAndView("error");
+            ss.close();
             return mav;
         }
     }

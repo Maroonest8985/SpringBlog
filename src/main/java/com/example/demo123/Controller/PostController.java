@@ -3,6 +3,9 @@ package com.example.demo123.Controller;
 
 import com.example.demo123.DTO.PostDTO;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionException;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +23,7 @@ import java.util.Map;
 @Controller
 public class PostController {
     @Autowired
-    SqlSession ss;
+    SqlSessionFactory sqlSessionFactory;
 
     @GetMapping("/newpost")
     public String newPost(){
@@ -29,6 +32,7 @@ public class PostController {
 
     @GetMapping("/uploadpost")
     public ModelAndView insertPost(HttpServletRequest request, HttpSession session){
+        SqlSession ss = sqlSessionFactory.openSession();
         int member_no = (int) session.getAttribute("member_no");
         PostDTO postDTO = new PostDTO();
         String title = request.getParameter("title");
@@ -41,10 +45,13 @@ public class PostController {
         postDTO.setImg(img);
         ModelAndView mav = new ModelAndView("redirect:/home");
         ModelAndView maverr = new ModelAndView("redirect:/error");
-        if(ss.insert("insertPost", postDTO) > 0){
-            return mav;
-        }else{
+        try{
+            ss.insert("insertPost", postDTO);
+        }catch(SqlSessionException e){
+            e.printStackTrace();
             return maverr;
+        }finally {
+            return mav;
         }
     }
 
@@ -52,6 +59,7 @@ public class PostController {
 
     @GetMapping("/readpost")
     public ModelAndView readPost(PostDTO postDTO, Model model, HttpServletRequest request){
+        SqlSession ss = sqlSessionFactory.openSession();
         ModelAndView mav = new ModelAndView("post");
         String post_no = request.getParameter("post_no");
         postDTO = ss.selectOne("selectPost", post_no);

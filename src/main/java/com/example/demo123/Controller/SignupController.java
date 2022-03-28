@@ -3,6 +3,9 @@ package com.example.demo123.Controller;
 
 import com.example.demo123.DAO.SignupDAO;
 import com.example.demo123.DTO.SignupDTO;
+import org.apache.ibatis.session.SqlSessionException;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +19,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class SignupController {
     @Autowired
-    SqlSession ss;
+    SqlSessionFactory sqlSessionFactory;
 
     @PostMapping("/signup")
     public ModelAndView signupForm(HttpSession session, HttpServletRequest request){
+        SqlSession ss = sqlSessionFactory.openSession();
         SignupDTO signupDTO = new SignupDTO();
         String email = request.getParameter("email");
         String id = request.getParameter("id");
@@ -28,9 +32,17 @@ public class SignupController {
         signupDTO.setId(id);
         signupDTO.setPwd(pwd);
         ModelAndView mav = new ModelAndView("redirect:/signupDone");
+        ModelAndView maverr = new ModelAndView("error");
         session.setAttribute("memberID", signupDTO.getId());
-        ss.insert("insertMember", signupDTO);
-        return mav;
+        try{
+            ss.insert("insertMember", signupDTO);
+        }catch(SqlSessionException e){
+            e.printStackTrace();
+            return maverr;
+        }finally{
+            ss.close();
+            return mav;
+        }
     }
 
     @GetMapping("/signupDone")
@@ -45,6 +57,7 @@ public class SignupController {
     @PostMapping("/checkid")
     @ResponseBody
     public int checkid(HttpServletRequest request){
+        SqlSession ss = sqlSessionFactory.openSession();
         String id = request.getParameter("userid");
         if(ss.selectOne("checkId", id) != null){
             return 0;
