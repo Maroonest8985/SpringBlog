@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +27,6 @@ public class LoginController{
 
     @PostMapping("/login")
     public ModelAndView login(LoginDAO loginDAO, HttpSession session, HttpServletRequest request){
-        SqlSession ss = sqlSessionFactory.openSession();
         LoginDTO loginDTO = new LoginDTO();
         MemberDTO memberDTO = new MemberDTO();
         String id = request.getParameter("id");
@@ -33,11 +34,15 @@ public class LoginController{
         Map<String, String> map = new HashMap<String, String>();
         map.put("id", id);
         map.put("pwd", pwd);
+        LocalDateTime now = LocalDateTime.now();
+        String formattedNow = now.format(DateTimeFormatter.ofPattern("yyyy/MM/dd  HH:mm:ss"));
+        SqlSession ss = sqlSessionFactory.openSession();
         try{
             memberDTO = ss.selectOne("loginMember", map);
+            System.out.println(id+" has logined." + formattedNow);
         }catch(SqlSessionException e){
             e.printStackTrace();
-        }finally{
+        }finally {
             ss.close();
         }
         ModelAndView mav = new ModelAndView("redirect:/home");
@@ -51,7 +56,6 @@ public class LoginController{
             session.setAttribute("member_no", m_no);
             session.setAttribute("member_email", m_email);
             session.setAttribute("member_pwd", m_pwd);
-
             return mav;
         }else{
             return maverr;
@@ -62,19 +66,20 @@ public class LoginController{
     @ResponseBody
     public int checklogin(HttpServletRequest request){
         MemberDTO memberDTO = new MemberDTO();
-        SqlSession ss = sqlSessionFactory.openSession();
         String id = request.getParameter("userid");
         String pwd = request.getParameter("password");
         Map<String, String> map = new HashMap<String, String>();
         map.put("id", id);
         map.put("pwd", pwd);
+        SqlSession ss = sqlSessionFactory.openSession();
         try{
             memberDTO = ss.selectOne("loginMember", map);
         }catch(SqlSessionException e){
             e.printStackTrace();
-        }finally{
+        }finally {
             ss.close();
         }
+
         if(memberDTO != null){
             return 1;
         }else{
@@ -85,7 +90,11 @@ public class LoginController{
     @GetMapping("/logout")
     public ModelAndView logout(HttpSession session){
         ModelAndView mav = new ModelAndView("redirect:/home");
+        String id = (String) session.getAttribute("member_id");
+        LocalDateTime now = LocalDateTime.now();
+        String formattedNow = now.format(DateTimeFormatter.ofPattern("yyyy/MM/dd  HH:mm:ss"));
         session.invalidate();
+        System.out.println(id+" has logout." + formattedNow);
         return mav;
     }
 }

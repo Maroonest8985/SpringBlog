@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,9 +31,8 @@ public class PostController {
         return "newpost";
     }
 
-    @GetMapping("/uploadpost")
+    @PostMapping("/uploadpost")
     public ModelAndView insertPost(HttpServletRequest request, HttpSession session){
-        SqlSession ss = sqlSessionFactory.openSession();
         int member_no = (int) session.getAttribute("member_no");
         PostDTO postDTO = new PostDTO();
         String title = request.getParameter("title");
@@ -43,27 +43,51 @@ public class PostController {
         postDTO.setTitle(title);
         postDTO.setText(text1);
         postDTO.setImg(img);
-        ModelAndView mav = new ModelAndView("redirect:/home");
-        ModelAndView maverr = new ModelAndView("redirect:/error");
+        ModelAndView mav = new ModelAndView();
+        SqlSession ss = sqlSessionFactory.openSession();
         try{
             ss.insert("insertPost", postDTO);
+            mav.setViewName("redirect:/home");
         }catch(SqlSessionException e){
             e.printStackTrace();
-            return maverr;
+            mav.setViewName("redirect:/error");
         }finally {
-            return mav;
+            ss.close();
         }
+        return mav;
+
+    }
+
+    @GetMapping("/deletePost")
+    public ModelAndView deletePost(HttpServletRequest request){
+        ModelAndView mav = new ModelAndView();
+        String post_no = request.getParameter("post_no");
+        SqlSession ss = sqlSessionFactory.openSession();
+        try{
+            ss.delete("deletePost", post_no);
+            mav.setViewName("redirect:/home");
+        }catch(SqlSessionException e){
+            e.printStackTrace();
+            mav.setViewName("error");
+        }finally {
+            ss.close();
+        }
+        return mav;
     }
 
 
-
-    @GetMapping("/readpost")
+    @GetMapping("/readpost") // no post page add
     public ModelAndView readPost(PostDTO postDTO, Model model, HttpServletRequest request){
-        SqlSession ss = sqlSessionFactory.openSession();
         ModelAndView mav = new ModelAndView("post");
         String post_no = request.getParameter("post_no");
-        postDTO = ss.selectOne("selectPost", post_no);
-
+        SqlSession ss = sqlSessionFactory.openSession();
+        try{
+            postDTO = ss.selectOne("selectPost", post_no);
+        }catch(SqlSessionException e){
+            e.printStackTrace();
+        }finally {
+            ss.close();
+        }
         String title = postDTO.getTitle();
         String text = postDTO.getText();
         String img = postDTO.getImg();
@@ -71,6 +95,7 @@ public class PostController {
         int member_no = postDTO.getMember_no();
         String member_name = postDTO.getMember_name();
 
+        mav.addObject("post_no", post_no);
         mav.addObject("title", title);
         mav.addObject("text", text);
         mav.addObject("img", img);

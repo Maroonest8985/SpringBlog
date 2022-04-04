@@ -23,7 +23,6 @@ public class SignupController {
 
     @PostMapping("/signup")
     public ModelAndView signupForm(HttpSession session, HttpServletRequest request){
-        SqlSession ss = sqlSessionFactory.openSession();
         SignupDTO signupDTO = new SignupDTO();
         String email = request.getParameter("email");
         String id = request.getParameter("id");
@@ -31,18 +30,19 @@ public class SignupController {
         signupDTO.setEmail(email);
         signupDTO.setId(id);
         signupDTO.setPwd(pwd);
-        ModelAndView mav = new ModelAndView("redirect:/signupDone");
-        ModelAndView maverr = new ModelAndView("error");
+        ModelAndView mav = new ModelAndView();
         session.setAttribute("memberID", signupDTO.getId());
+        SqlSession ss = sqlSessionFactory.openSession();
         try{
             ss.insert("insertMember", signupDTO);
-        }catch(SqlSessionException e){
+            mav.setViewName("redirect:/signupDone");
+        } catch (SqlSessionException e) {
             e.printStackTrace();
-            return maverr;
-        }finally{
+            mav.setViewName("error");
+        }finally {
             ss.close();
-            return mav;
         }
+        return mav;
     }
 
     @GetMapping("/signupDone")
@@ -57,9 +57,18 @@ public class SignupController {
     @PostMapping("/checkid")
     @ResponseBody
     public int checkid(HttpServletRequest request){
-        SqlSession ss = sqlSessionFactory.openSession();
         String id = request.getParameter("userid");
-        if(ss.selectOne("checkId", id) != null){
+        String status = null;
+        SqlSession ss = sqlSessionFactory.openSession();
+        try{
+            status = ss.selectOne("checkId", id);
+        } catch (SqlSessionException e) {
+            e.printStackTrace();
+        }finally {
+            ss.close();
+        }
+
+        if(status != null){
             return 0;
         }else{
             return 1;

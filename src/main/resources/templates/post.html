@@ -27,6 +27,14 @@
                         <!-- Post content-->
                         <section class="mb-5">
                             <p th:utext="${text}" class="fs-5 mb-4"></p> <!----------th:utext : parsing html---------->
+                            <hr>
+                            <div class="row float-end">
+                                <div class="col">
+                                    <a href="javascript:history.back();" class="btn btn-secondary">목록</a>
+                                    <a th:href="@{./updatePost(post_no=${post_no})}" th:if="${session.member_id} == ${member_name}" id="postModify" class="btn btn-primary">수정</a>
+                                    <a th:href="@{./deletePost(post_no=${post_no})}" th:if="${session.member_id} == ${member_name}" id="postDelete" class="btn btn-danger">삭제</a>
+                                </div>
+                            </div>
                             <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
                             </section>
                     </article>

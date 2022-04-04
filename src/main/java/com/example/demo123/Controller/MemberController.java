@@ -20,25 +20,24 @@ public class MemberController {
 
     @GetMapping("/memberinfo")
     public ModelAndView memberInfo(Model model){
-        ModelAndView mav = new ModelAndView("member-info");
-        return mav;
+        return new ModelAndView("member-info");
     }
 
     @GetMapping("/delete-member")
     public ModelAndView deleteMember(HttpSession session){
-        SqlSession ss = sqlSessionFactory.openSession();
         int no = (int) session.getAttribute("member_no");
+        ModelAndView mav = new ModelAndView("member-delete");
+        SqlSession ss = sqlSessionFactory.openSession();
         try{
             ss.delete("deleteMember", no);
+            session.invalidate();
+            mav = new ModelAndView("member-delete");
         }catch(SqlSessionException e){
             e.printStackTrace();
-            ModelAndView mav = new ModelAndView("error");
-            return mav;
+            mav = new ModelAndView("error");
         }finally{
-            ModelAndView mav = new ModelAndView("member-delete");
-            session.invalidate();
             ss.close();
-            return mav;
         }
+        return mav;
     }
 }

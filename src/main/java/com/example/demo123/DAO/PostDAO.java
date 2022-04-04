@@ -13,4 +13,6 @@ public interface PostDAO {
    public void insertPost(PostDTO postDTO);
    public PostDTO selectPost(int no);
    public ArrayList<PostDTO> getListPost();
+   public int getRows(int limit, int contentNo);
+   public void deletePost(String post_no);
 }
