@@ -75,4 +75,14 @@ public class PostDTO {
     private String img;
     private String date;
     private String member_name;
+
+    public int getComment() {
+        return comment;
+    }
+
+    public void setComment(int comment) {
+        this.comment = comment;
+    }
+
+    private int comment;
 }

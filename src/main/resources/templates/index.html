@@ -13,14 +13,19 @@
                     <div th:if="${nowPage} == 1">
                     <!-- Featured blog post-->
                         <h2>Latest Post</h2>
-                    <div class="card mb-4"><!----------pageNo=1일때------->
+                    <div class="card card-lightmode mb-4"><!----------pageNo=1일때------->
                         <a th:href="@{./readpost(post_no=${featPostDTO.no})}"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
                         <div class="card-body">
                             <div class="small text-muted">작성자 : [[${featPostDTO.member_name}]]</div>
                             <div class="small text-muted">[[${featPostDTO.date}]]</div>
                             <h2 class="card-title">[[${featPostDTO.title}]]</h2>
                             <p th:utext="${featPostDTO.text}" class="card-text text-short"></p>
-                            <a th:href="@{./readpost(post_no=${featPostDTO.no})}" class="btn btn-primary">Read more →</a>
+                            <div class="row px-0">
+                                <div class="col">
+                                    <a th:href="@{./readpost(post_no=${featPostDTO.no})}" class="btn btn-primary">Read more →</a>
+                                    <p class="float-end">댓글 : [[${featPostDTO.comment}]]개</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                         <hr>
@@ -28,14 +33,19 @@
                     <div class="row">
                         <div th:each="post : ${arrPostDTO}" class="col-lg-6">
                             <!-- Blog post-->
-                            <div class="card mb-4">
+                            <div class="card card-lightmode mb-4">
                                 <a th:href="@{./readpost(post_no=${post.no})}"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
                                 <div class="card-body">
                                     <div class="small text-muted">작성자 : [[${post.member_name}]]</div>
                                     <div class="small text-muted">[[${post.date}]]</div>
                                     <h2 class="card-title h4">[[${post.title}]]</h2>
                                     <p th:utext="${post.text}" class="card-text text-short"></p>
-                                    <a class="btn btn-primary" th:href="@{./readpost(post_no=${post.no})}">Read more →</a>
+                                    <div class="row px-0">
+                                        <div class="col">
+                                            <a class="btn btn-primary" th:href="@{./readpost(post_no=${post.no})}">Read more →</a>
+                                            <p class="float-end">댓글 : [[${post.comment}]] 개</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -46,15 +56,19 @@
                         <div class="row">
                             <div th:each="post : ${arrPostDTO}" class="col-lg-6">
                                 <!-- Blog post-->
-                                <div class="card mb-4">
+                                <div class="card card-lightmode mb-4">
                                     <a th:href="@{./readpost(post_no=${post.no})}"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
                                     <div class="card-body">
                                         <div class="small text-muted">작성자 : [[${post.member_name}]]</div>
                                         <div class="small text-muted">[[${post.date}]]</div>
                                         <h2 class="card-title h4">[[${post.title}]]</h2>
                                         <p th:utext="${post.text}" class="card-text text-short"></p>
-                                        <a class="btn btn-primary" th:href="@{./readpost(post_no=${post.no})}">Read more →</a>
-                                    </div>
+                                        <div class="row px-0">
+                                            <div class="col">
+                                                <a class="btn btn-primary" th:href="@{./readpost(post_no=${post.no})}">Read more →</a>
+                                                <p class="float-end">댓글 : [[${post.comment}]] 개</p>
+                                            </div>
+                                        </div>                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +92,7 @@
                 <!-- Side widgets-->
                 <div class="col-lg-4">
                     <!-- Search widget-->
-                    <div class="card mb-4">
+                    <div class="card card-lightmode mb-4">
                         <div class="card-header">Search</div>
                         <div class="card-body">
                             <div class="input-group">
@@ -88,7 +102,7 @@
                         </div>
                     </div>
                     <!-- Categories widget-->
-                    <div class="card mb-4">
+                    <div class="card card-lightmode mb-4">
                         <div class="card-header">Categories</div>
                         <div class="card-body">
                             <div class="row">
@@ -110,7 +124,7 @@
                         </div>
                     </div>
                     <!-- Side widget-->
-                    <div class="card mb-4">
+                    <div class="card card-lightmode mb-4">
                         <div class="card-header">Side Widget</div>
                         <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
                     </div>

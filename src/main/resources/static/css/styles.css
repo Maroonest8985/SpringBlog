@@ -596,10 +596,6 @@ progress {
 .input-font-darkmode{
   color : black !important;
 }
-.card-darkmode {
-  background-color: #212529;
-  border: 1px solid grey !important;
-}
 
 .blockquote {
   margin-bottom: 1rem;
@@ -3956,6 +3952,12 @@ textarea.form-control-lg {
   list-style: none;
 }
 
+.nav-fixed{
+  position: fixed !important;
+  width: 100%;
+  z-index: 99999 !important;
+}
+
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
@@ -4539,9 +4541,21 @@ textarea.form-control-lg {
   min-width: 0;
   word-wrap: break-word;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
+
+
+.card-darkmode {
+  background-color: #212529;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.card-lightmode{
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
+
+}
+
 .card > hr {
   margin-right: 0;
   margin-left: 0;
@@ -7877,6 +7891,16 @@ textarea.form-control-lg {
 .bg-dark {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.card-bg-light{
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
+}
+
+.card-bg-dark{
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity))!important;
 }
 
 .bg-black {

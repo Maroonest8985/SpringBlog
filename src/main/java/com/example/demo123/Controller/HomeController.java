@@ -4,7 +4,6 @@ import com.example.demo123.DTO.PostDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionException;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,8 +41,7 @@ public class HomeController {
         int maxPage = 0;////총 페이지 갯수 -> getRows 나누기 contentNo의 몫
         int contentNo = 4;//페이지에 표시될 항목 갯수;
         int limit = ((nowPage-1)*contentNo)+1;
-        SqlSession ss = sqlSessionFactory.openSession();
-        try{
+        try(SqlSession ss = sqlSessionFactory.openSession()){
             maxPage = ss.selectOne("getRows");
             if((maxPage-1)%contentNo == 0){
                 maxPage = (maxPage/contentNo); //게시글이 4의배수로 떨어질 때 추가 페이지 생성x
@@ -65,8 +63,6 @@ public class HomeController {
             featPostDTO = ss.selectOne("getListPostPage", featMap);
         }catch(SqlSessionException e){
             e.printStackTrace();
-        }finally{
-            ss.close();
         }
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("maxPage", maxPage);

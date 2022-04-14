@@ -6,9 +6,9 @@
 <mapper namespace="com.example.demo123.DAO.PostDAO">
     <insert id="insertPost">
         insert into post
-        (title, text, img, member_no)
+        (title, text, img, member_no, date)
         values
-        (#{title}, #{text}, #{img}, #{member_no});
+        (#{title}, #{text}, #{img}, #{member_no}, CURRENT_TIMESTAMP);
     </insert>
 
     <select id="getListPost" resultType="com.example.demo123.DTO.PostDTO">
@@ -16,8 +16,13 @@
          left join member on post.member_no = member.no order by post.no desc;
     </select>
 
+    <select id="checkDeletePost" resultType="int">
+        select count(*) from post where member_no = #{member_no} and no = #{post_no};
+    </select>
+
     <select id="getListPostPage" resultType="com.example.demo123.DTO.PostDTO">
-        select post.*, member.id as member_name from post
+        select post.*, member.id as member_name,
+        (select count(*) from comment where post_no=post.no) as comment from post
          left join member on post.member_no = member.no order by post.no desc
         limit #{limit}, #{contentNo};
     </select>
@@ -35,7 +40,16 @@
     </select>
 
     <delete id="deletePost">
-        delete from post where no=#{post_no};
+        delete from post where no=#{post_no} and member_no=#{member_no};
     </delete>
+
+    <update id="updatePost">
+        update post set title=#{title}, text=#{text},
+        img=#{img}, date=CURRENT_TIMESTAMP where no=#{post_no} and member_no=#{member_no};
+    </update>
+
+    <select id="getMemberName" resultType="String">
+        select id from member where no = #{member_no};
+    </select>
 
 </mapper>

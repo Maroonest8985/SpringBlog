@@ -7,5 +7,6 @@
         <mapper resource="LoginMapper.xml"/>
         <mapper resource="PostMapper.xml"/>
         <mapper resource="MemberMapper.xml"/>
+        <mapper resource="CommentMapper.xml"/>
     </mappers>
 </configuration>

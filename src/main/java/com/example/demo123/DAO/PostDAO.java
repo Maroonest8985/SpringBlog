@@ -15,4 +15,6 @@ public interface PostDAO {
    public ArrayList<PostDTO> getListPost();
    public int getRows(int limit, int contentNo);
    public void deletePost(String post_no);
+   public void updatePost(PostDTO postDTO);
+   public int checkDeletePost(String post_no, String member_no);
 }

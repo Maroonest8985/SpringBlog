@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo123.DAO.CommentDAO">
+    <insert id="addComment">
+        insert into comment
+        (member_no, text, post_no)
+        values
+        (#{member_no},#{text},#{post_no});
+    </insert>
+    <select id="getComment" resultType="com.example.demo123.DTO.CommentDTO">
+        select comment.*, member.id as member_name from comment
+        left join member on comment.member_no = member.no
+        where post_no = #{post_no} order by date desc;
+    </select>
+
+    <select id="getCommentCount">
+        select COUNT(*) from comment where post_no=#{post_no};
+    </select>
+
+    <delete id="deleteComment">
+        delete * from comment where no=#{comment_no} and member_no=#{member_no};
+    </delete>
+
+</mapper>

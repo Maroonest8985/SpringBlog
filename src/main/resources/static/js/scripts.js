@@ -24,10 +24,11 @@ $(function(){
         $(".modal-content").toggleClass("modal-darkmode font-darkmode");
         $("#darkmodeBtn").toggleClass("active");
         $("label").each(function(){
-            $(this).addClass("input-font-darkmode", 400, "swing");
+            $(this).addClass("input-font-darkmode", 200, "swing");
         });
         $(".card").each(function() {
             $(this).toggleClass("card-darkmode");
+            $(this).toggleClass("card-lightmode");
         });
     }else{
         //do nothing
@@ -38,29 +39,31 @@ $(function(){
         if(isDark == 0){ //darkmode disabled when clicking button
             localStorage.clear();
             localStorage.setItem("isDark", "1");//darkmode on
-            $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
-            $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
+            $("body").toggleClass("bg-darkmode font-darkmode", 200, "swing");
+            $("header").toggleClass("bg-darkmode font-darkmode", 200, "swing");
             $("label").each(function(){
-                $(this).addClass("input-font-darkmode", 400, "swing");
+                $(this).addClass("input-font-darkmode", 200, "swing");
             });
             $(".modal-content").toggleClass("modal-darkmode font-darkmode");
-            $("#darkmodeBtn").toggleClass("active", 400, "swing");
+            $("#darkmodeBtn").toggleClass("active", 200, "swing");
             $(".card").each(function() {
-                $(this).toggleClass("card-darkmode", 400, "swing");
+                $(this).toggleClass("card-darkmode", 100, "swing");
+                $(this).toggleClass("card-lightmode", 100, "swing");
             });
         }else if(isDark == 1){
             localStorage.clear();
             localStorage.setItem("isDark", "0");//darkmode off
-            $("body").toggleClass("bg-darkmode font-darkmode", 400, "swing");
-            $("header").toggleClass("bg-darkmode font-darkmode", 400, "swing");
+            $("body").toggleClass("bg-darkmode font-darkmode", 200, "swing");
+            $("header").toggleClass("bg-darkmode font-darkmode", 200, "swing");
             $("label").each(function(){
-                $(this).removeClass("input-font-darkmode", 400, "swing");
+                $(this).removeClass("input-font-darkmode", 200, "swing");
             });
             $(".modal-content").toggleClass("modal-darkmode font-darkmode");
             $(".card").each(function() {
-                $(this).toggleClass("card-darkmode", 400, "swing");
+                $(this).toggleClass("card-darkmode", 100, "swing");
+                $(this).toggleClass("card-lightmode", 100, "swing");
             });
-            $("#darkmodeBtn").toggleClass("active", 400, "swing");
+            $("#darkmodeBtn").toggleClass("active", 200, "swing");
         }
     });
 
@@ -185,11 +188,47 @@ $(function(){
                 }
             })
         }
+    });
+
+        $("#addComment").click(function(){
+        var text = $("textarea#commentText").val();
+        var str = $(location).attr('search');
+        var post_no = str.split("=");
+        var post_no1 = post_no[1];
+        $.ajax({
+        type: 'POST',
+        data: {text : text, post_no : post_no1},// form data 전송
+        url: "./addcomment",
+        success: function (commentDTO) { // 성공하면 function 실행
+        $("textarea#commentText").val("");
+        if (commentDTO != null){
+        console.log("success");
+        console.log(commentDTO);
+        var text = commentDTO.text;
+        var name = commentDTO.member_name;
+        $("#ajaxComment").prepend("<div class=\"d-flex mb-4\">\n" +
+        "                                    <!-- Parent comment-->\n" +
+        "                                    <div class=\"flex-shrink-0\"><img class=\"rounded-circle\" src=\"https://dummyimage.com/50x50/ced4da/6c757d.jpg\" alt=\"...\" /></div>\n" +
+        "                                    <div class=\"ms-3\">\n" +
+        "                                        <div class=\"fw-bold\">"+name+"</div>\n" +
+        "                                        <p>"+text+"</p>\n" +
+        "                                    </div>\n" +
+        "    <div th:if=\"${comments.member_no} == ${session.member_no}\" class=\"ms-auto\">"+
+        "        <a id=\"deleteComment\" th:href=\"@{./deletecomment(comment_no=${comments.no})}\" class=\"btn btn-danger btn-sm\">삭제</a>"+
+        "    </div>"+
+        "                                </div>"
+
+        )
+
+    }
+    }
+    });
+    });
+    $("#deleteComment").click(function(){
+
     })
 
     //------------------------------------card-text shortener---------------------------
 
 
 });
-
-

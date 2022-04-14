@@ -5,7 +5,8 @@
 
 
 <th:block layout:fragment="content">
-        <!-- Page content-->
+
+    <!-- Page content-->
         <div class="container mt-5">
             <div class="row">
                 <div class="col-lg-8">
@@ -28,54 +29,98 @@
                         <section class="mb-5">
                             <p th:utext="${text}" class="fs-5 mb-4"></p> <!----------th:utext : parsing html---------->
                             <hr>
-                            <div class="row float-end">
+                            <div class="row">
                                 <div class="col">
                                     <a href="javascript:history.back();" class="btn btn-secondary">목록</a>
-                                    <a th:href="@{./updatePost(post_no=${post_no})}" th:if="${session.member_id} == ${member_name}" id="postModify" class="btn btn-primary">수정</a>
-                                    <a th:href="@{./deletePost(post_no=${post_no})}" th:if="${session.member_id} == ${member_name}" id="postDelete" class="btn btn-danger">삭제</a>
+                                    <a th:href="@{./editpost(post_no=${post_no})}" th:if="${session.member_id} == ${member_name}" id="postModify" class="btn btn-primary">수정</a>
+                                    <a th:if="${session.member_id} == ${member_name}" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" id="postDelete" class="btn btn-danger">삭제</a>
                                 </div>
                             </div>
-                            <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
+                            <hr>
                             </section>
                     </article>
+                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                                    <button id="btnDeleteModalClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mx-auto text-center">
+                                        <h5>Are you sure to Delete?</h5>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                    <a th:href="@{./deletepost(post_no=${post_no})}" type="button" class="btn btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Comment</h5>
+                                    <button id="btnCommentModalClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mx-auto text-center">
+                                        <h5>Add Comment?</h5>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                    <button id="addComment" type="button" data-bs-dismiss="modal" class="btn btn-primary">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Comments section-->
+                    <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
                     <section class="mb-5">
-                        <div class="card bg-light">
+                        <div class="card card-lightmode">
                             <div class="card-body">
                                 <!-- Comment form-->
-                                <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                                <form id="commentForm" th:action="@{./addcomment(post_no=${post_no})}" method="post" class="mb-4">
+                                    <textarea id="commentText" name="text" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <div class="row">
+                                        <div class="col mt-3">
+                                            <button data-bs-toggle="modal" data-bs-target="#commentModal" type="button" class="btn btn-primary">댓글작성</button>
+                                        </div>
+                                    </div>
+                                </form>
                                 <!-- Comment with nested comments-->
-                                <div class="d-flex mb-4">
+                                <div id="ajaxComment">
+
+                                </div>
+                                <div th:if="${comment}">
+                                <div th:each="comments : ${comment}" class="d-flex mb-4">
                                     <!-- Parent comment-->
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
+                                        <div th:text="${comments.member_name}" class="fw-bold">Commenter Name</div>
+                                        <p th:utext="${comments.text}"></p>
                                         <!-- Child comment 1-->
-                                        <div class="d-flex mt-4">
+                                        <div th:if="${comments.reply} == 1" class="d-flex mt-4">
+                                            <div>
                                             <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                             <div class="ms-3">
                                                 <div class="fw-bold">Commenter Name</div>
                                                 And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
                                             </div>
-                                        </div>
-                                        <!-- Child comment 2-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                When you put money directly to a problem, it makes a good headline.
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- Single comment-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                                    <div th:if="${comments.member_no} == ${session.member_no}" class="ms-auto">
+                                        <a id="deleteComment" th:href="@{./deletecomment(comment_no=${comments.no})}" class="btn btn-danger btn-sm">삭제</a>
                                     </div>
+                                </div>
+                            </div>
+                                <div th:unless="${comment}">
+                                    <p th:text="코멘트가 없습니다."></p>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +129,7 @@
                 <!-- Side widgets-->
                 <div class="col-lg-4">
                     <!-- Search widget-->
-                    <div class="card mb-4">
+                    <div class="card card-lightmode mb-4">
                         <div class="card-header">Search</div>
                         <div class="card-body">
                             <div class="input-group">
@@ -94,7 +139,7 @@
                         </div>
                     </div>
                     <!-- Categories widget-->
-                    <div class="card mb-4">
+                    <div class="card card-lightmode mb-4">
                         <div class="card-header">Categories</div>
                         <div class="card-body">
                             <div class="row">
@@ -116,7 +161,7 @@
                         </div>
                     </div>
                     <!-- Side widget-->
-                    <div class="card mb-4">
+                    <div class="card card-lightmode mb-4">
                         <div class="card-header">Side Widget</div>
                         <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
                     </div>
