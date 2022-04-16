@@ -206,29 +206,56 @@ $(function(){
         console.log(commentDTO);
         var text = commentDTO.text;
         var name = commentDTO.member_name;
-        $("#ajaxComment").prepend("<div class=\"d-flex mb-4\">\n" +
-        "                                    <!-- Parent comment-->\n" +
-        "                                    <div class=\"flex-shrink-0\"><img class=\"rounded-circle\" src=\"https://dummyimage.com/50x50/ced4da/6c757d.jpg\" alt=\"...\" /></div>\n" +
-        "                                    <div class=\"ms-3\">\n" +
-        "                                        <div class=\"fw-bold\">"+name+"</div>\n" +
-        "                                        <p>"+text+"</p>\n" +
-        "                                    </div>\n" +
-        "    <div th:if=\"${comments.member_no} == ${session.member_no}\" class=\"ms-auto\">"+
-        "        <a id=\"deleteComment\" th:href=\"@{./deletecomment(comment_no=${comments.no})}\" class=\"btn btn-danger btn-sm\">삭제</a>"+
-        "    </div>"+
-        "                                </div>"
+        var comment_no = commentDTO.no;
+        var commentHtml = "<div id='commentCard"+comment_no+"' class=\"d-flex mb-4\">\n" +
+            "                                    <!-- Parent comment-->\n" +
+            "                                    <div class=\"flex-shrink-0\"><img class=\"rounded-circle\" src=\"https://dummyimage.com/50x50/ced4da/6c757d.jpg\" alt=\"...\" /></div>\n" +
+            "                                    <div class=\"ms-3\">\n" +
+            "                                        <div class=\"fw-bold\">"+name+"</div>\n" +
+            "                                        <p>"+text+"</p>\n" +
+            "                                    </div>\n" +
+            "    <div th:if=\"${comments.member_no} == ${session.member_no}\" class=\"ms-auto\">"+
+            "    <button id=\"callDelete"+comment_no+"\"data-bs-toggle=\"modal\" onclick='deleteComment(this.id)' data-bs-target=\"#commentDeleteModal\" class=\"btn btn-danger btn-sm\">삭제</button>"+
+            "    </div>"+
+            "                                </div>";
 
-        )
 
-    }
+        $("#ajaxComment").prepend($(commentHtml).hide().fadeIn(2000));
+        }
     }
     });
     });
-    $("#deleteComment").click(function(){
-
-    })
 
     //------------------------------------card-text shortener---------------------------
+});
 
+function deleteComment(id){
+    var btnId = id.substr(10);
+    console.log(btnId);
+    $("#deleteComment").attr("id", "deleteComment"+btnId);
+    $("#deleteComment"+btnId).click(function(){
+        $.ajax({
+            type: "POST",
+            data: {comment_no: btnId},
+            url: "./deletecomment",
+            success: function(result){
+                if(result > 0){
+                    $("#commentCard"+btnId).remove();
+                    $("#deleteComment"+btnId).attr("id", "deleteComment");
+                }
+            }
+        });
+    })
+}
+
+$(function(){
+    var scrollY = localStorage.getItem("scrolly");
+    if (scrollY != null && scrollY != '' && scrollY > 0) {
+    window.scrollTo({top: scrollY, left: "0", behavior: "instant"});
+}
 
 });
+function movePage(page){
+    localStorage.setItem("scrolly", scrollY);
+    location.href="./home?pageNo="+page;
+}

@@ -5,7 +5,9 @@
 
 
 <th:block layout:fragment="content">
+<script>
 
+</script>
     <!-- Page content-->
         <div class="container mt-5">
             <div class="row">
@@ -78,6 +80,26 @@
                         </div>
                     </div>
 
+                    <div class="modal fade" id="commentDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Comment</h5>
+                                    <button id="btnCommentDeleteModalClose" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mx-auto text-center">
+                                        <h5>Delete Comment?</h5>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                    <button id="deleteComment" data-bs-dismiss="modal" class="btn btn-danger">삭제</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Comments section-->
                     <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
                     <section class="mb-5">
@@ -85,9 +107,10 @@
                             <div class="card-body">
                                 <!-- Comment form-->
                                 <form id="commentForm" th:action="@{./addcomment(post_no=${post_no})}" method="post" class="mb-4">
-                                    <textarea id="commentText" name="text" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <textarea th:if="${session.member_no}" id="commentText" name="text" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <textarea th:unless="${session.member_no}" name="text" class="form-control" rows="3" placeholder="로그인하여 댓글을 남기세요." disabled></textarea>
                                     <div class="row">
-                                        <div class="col mt-3">
+                                        <div th:if="${session.member_no}" class="col mt-3">
                                             <button data-bs-toggle="modal" data-bs-target="#commentModal" type="button" class="btn btn-primary">댓글작성</button>
                                         </div>
                                     </div>
@@ -97,7 +120,7 @@
 
                                 </div>
                                 <div th:if="${comment}">
-                                <div th:each="comments : ${comment}" class="d-flex mb-4">
+                                <div  th:each="comments : ${comment}" th:id="'commentCard'+${comments.no}" class="d-flex mb-4">
                                     <!-- Parent comment-->
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
@@ -115,7 +138,7 @@
                                         </div>
                                     </div>
                                     <div th:if="${comments.member_no} == ${session.member_no}" class="ms-auto">
-                                        <a id="deleteComment" th:href="@{./deletecomment(comment_no=${comments.no})}" class="btn btn-danger btn-sm">삭제</a>
+                                        <button th:id="'callDelete'+${comments.no}" data-bs-toggle="modal" onclick="deleteComment(this.id)" data-bs-target="#commentDeleteModal" class="btn btn-danger btn-sm">삭제</button>
                                     </div>
                                 </div>
                             </div>

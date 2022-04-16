@@ -3955,7 +3955,7 @@ textarea.form-control-lg {
 .nav-fixed{
   position: fixed !important;
   width: 100%;
-  z-index: 99999 !important;
+  z-index: 999 !important;
 }
 
 .nav-link {
@@ -4848,6 +4848,11 @@ textarea.form-control-lg {
   list-style: none;
 }
 
+.pagination-overflow{
+  max-width : 300px;
+  overflow : auto;
+
+}
 .page-link {
   position: relative;
   display: block;

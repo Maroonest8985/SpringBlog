@@ -16,12 +16,15 @@
         where post_no = #{post_no} order by date desc;
     </select>
 
+    <select id="getCommentNo" resultType="Long">
+        select LAST_INSERT_ID() as comment_no;
+    </select>
     <select id="getCommentCount">
         select COUNT(*) from comment where post_no=#{post_no};
     </select>
 
     <delete id="deleteComment">
-        delete * from comment where no=#{comment_no} and member_no=#{member_no};
+        delete from comment where no=#{comment_no} and member_no=#{member_no};
     </delete>
 
 </mapper>

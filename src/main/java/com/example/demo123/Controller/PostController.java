@@ -178,9 +178,10 @@ public class PostController {
     @ResponseBody
     public CommentDTO insertComment(HttpServletRequest request, HttpSession session, CommentDTO commentDTO){
         String text = request.getParameter("text");
-        int member_no = (int) session.getAttribute("member_no");
+        int member_no = (Integer) session.getAttribute("member_no");
         long post_no = Long.parseLong(request.getParameter("post_no"));
         String member_name = "";
+        long comment_no;
         commentDTO.setText(text);
         commentDTO.setMember_no(member_no);
         commentDTO.setPost_no(post_no);
@@ -188,7 +189,9 @@ public class PostController {
         try{
             ss.insert("addComment", commentDTO);
             member_name = ss.selectOne("getMemberName", member_no);
+            comment_no = ss.selectOne("getCommentNo");
             commentDTO.setMember_name(member_name);
+            commentDTO.setNo(comment_no);
         }catch(SqlSessionException e){
             e.printStackTrace();
         }finally{
@@ -204,13 +207,14 @@ public class PostController {
         int comment_no = 0;
         int member_no = 0;
         comment_no = Integer.parseInt(request.getParameter("comment_no"));
-        member_no = (int) session.getAttribute("member_no");
+        member_no = (Integer) session.getAttribute("member_no");
         Map<String, Integer> map = new HashMap<>();
         map.put("comment_no", comment_no);
         map.put("member_no", member_no);
         SqlSession ss = sqlSessionFactory.openSession();
         try{
-            if(ss.delete("deleteComment", map) > 0){
+            int delete = ss.delete("deleteComment", map);
+            if(delete > 0){
                 result = 1;
             }else{
                 result = 0;

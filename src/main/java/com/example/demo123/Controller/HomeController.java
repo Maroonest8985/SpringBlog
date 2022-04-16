@@ -65,6 +65,27 @@ public class HomeController {
             e.printStackTrace();
         }
         ModelAndView mav = new ModelAndView("index");
+        //만약 nowPage가 15야
+        //maxPage가 19개고
+        //그럼 PageCounter는 1이야
+        //그럼 newer는 5야
+        //그럼 nowPageCounter는 10이야
+        //그럼 nowPageCounter에서부터 19까지 나와야돼
+        //그럼 if(maxPage-nowPageCounter가 10보다 작으면) 이후 버튼이 안나와
+        //pageCOunter는 1~10일때 0, 11~19일때 1 20~29일때 2
+        int pageCounter = (nowPage)/10; //10단위 페이지 -
+        int newer = (nowPage)%10;
+        if(nowPage == 10){
+            pageCounter = 0;
+        }
+        int nowPageCounter = pageCounter*10;
+        System.out.println("pageCounter"+pageCounter);
+        System.out.println("newer"+newer);
+        System.out.println("nowPageCounter"+nowPageCounter);
+        System.out.println("maxPage"+maxPage);
+        mav.addObject("pageCounter", pageCounter);
+        mav.addObject("nowPageCounter", nowPageCounter);
+        mav.addObject("newer", newer);
         mav.addObject("maxPage", maxPage);
         mav.addObject("nowPage", nowPage);
         mav.addObject("arrPostDTO", arrPostDTO);

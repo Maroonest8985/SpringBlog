@@ -5,5 +5,22 @@
       layout:decorate="~{layout/layout}">
 
 <div layout:fragment="content">
-error
+    <!-- Page content-->
+    <div id="home" class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2>잘못된 접근입니다.</h2>
+                <a href="./home" role="button" class="btn btn-secondary btn-lg">홈으로</a>
+            </div>
+        </div>
+    </div>
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script th:inline="javascript" th:src="@{/js/scripts.js}"></script>
 </div>
+</html>
