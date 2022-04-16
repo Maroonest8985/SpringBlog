@@ -249,8 +249,12 @@ function deleteComment(id){
 }
 
 $(function(){
+    var index = location.search;
     var scrollY = localStorage.getItem("scrolly");
-    if (scrollY != null && scrollY != '' && scrollY > 0) {
+    console.log(index);
+    if(index == ""){
+        scrollY = 0;
+    }else if(scrollY != null && scrollY != '' && scrollY > 0) {
     window.scrollTo({top: scrollY, left: "0", behavior: "instant"});
 }
 
