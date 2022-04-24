@@ -1,9 +1,19 @@
-
 $(function(){
+
+    $("#homeBtn").click(function (){
+        sessionStorage.setItem("cachePage", 1);
+    })
     var index = location.pathname;
-    console.log(index.indexOf("home"));
     if(index.indexOf("home") != -1){
         $("#navbarHome").addClass("active");
+        var cachePage = sessionStorage.getItem("cachePage");
+        if(cachePage == "null"){
+            cachePage = 1;
+            sessionStorage.setItem("cachePage", 1);
+        }
+        console.log(cachePage);
+        pager(cachePage);
+
     }else if(index.indexOf("about") != -1){
         $("#navbarAbout").addClass("active");
     }else if(index.indexOf("contact") != -1){
@@ -13,26 +23,29 @@ $(function(){
     }else {
         $("#navbarHome").addClass("active");
     }
-    //navbar indicator toggler
-    //--------------------------------------------------------------------------------
-    var isDark = localStorage.getItem("isDark");
-    if(isDark == null){
-        var isDark = localStorage.setItem("isDark", 0);
-    }else if(isDark == 1){//darkmode on when page loaded
-        $("body").toggleClass("bg-darkmode font-darkmode");
-        $("header").toggleClass("bg-darkmode font-darkmode");
-        $(".modal-content").toggleClass("modal-darkmode font-darkmode");
-        $("#darkmodeBtn").toggleClass("active");
-        $("label").each(function(){
-            $(this).addClass("input-font-darkmode", 200, "swing");
-        });
-        $(".card").each(function() {
-            $(this).toggleClass("card-darkmode");
-            $(this).toggleClass("card-lightmode");
-        });
-    }else{
-        //do nothing
-    }
+    //navbar indicator toggler===================================================================
+
+
+        var isDark = localStorage.getItem("isDark");
+        if (isDark == null) {
+            var isDark = localStorage.setItem("isDark", 0);
+        } else if (isDark == 1) {//darkmode on when page loaded
+            $("body").toggleClass("bg-darkmode font-darkmode");
+            $("header").toggleClass("bg-darkmode font-darkmode");
+            $(".modal-content").toggleClass("modal-darkmode font-darkmode");
+            $("#darkmodeBtn").toggleClass("active");
+            $("label").each(function () {
+                $(this).addClass("input-font-darkmode");
+            });
+            $(".card").each(function () {
+                $(this).toggleClass("card-darkmode");
+                $(this).toggleClass("card-lightmode");
+            });
+        } else {
+            //do nothing
+        }
+
+
 
     $("#darkmodeBtn").click(function(e){
         var isDark = localStorage.getItem("isDark");
@@ -66,6 +79,9 @@ $(function(){
             $("#darkmodeBtn").toggleClass("active", 200, "swing");
         }
     });
+
+   //=============Darkmode========================================================================
+
 
     var idCheckOk = 0;
     $("#idCheck").click(function(){
@@ -168,8 +184,8 @@ $(function(){
         }
     });
 
-    //darkmode toggler script
-    //--------------------------------------------------------------------------------
+    //Sign Up JS=================================================================================
+
     $("#btnSignin").click(function(){
         var id = $("#loginIdInput").val();
         var pwd = $("#loginPwdInput").val();
@@ -190,6 +206,7 @@ $(function(){
         }
     });
 
+    //==============Sign in JS =================================================================
         $("#addComment").click(function(){
         var text = $("textarea#commentText").val();
         var str = $(location).attr('search');
@@ -202,8 +219,6 @@ $(function(){
         success: function (commentDTO) { // 성공하면 function 실행
         $("textarea#commentText").val("");
         if (commentDTO != null){
-        console.log("success");
-        console.log(commentDTO);
         var text = commentDTO.text;
         var name = commentDTO.member_name;
         var comment_no = commentDTO.no;
@@ -225,13 +240,10 @@ $(function(){
     }
     });
     });
-
-    //------------------------------------card-text shortener---------------------------
 });
-
+//Add Comment JS=================================================================================
 function deleteComment(id){
     var btnId = id.substr(10);
-    console.log(btnId);
     $("#deleteComment").attr("id", "deleteComment"+btnId);
     $("#deleteComment"+btnId).click(function(){
         $.ajax({
@@ -247,19 +259,164 @@ function deleteComment(id){
         });
     })
 }
-
+//Delete Comment JS ============================================================================
 $(function(){
     var index = location.search;
+    var indexHome = location.pathname;
     var scrollY = localStorage.getItem("scrolly");
-    console.log(index);
     if(index == ""){
         scrollY = 0;
-    }else if(scrollY != null && scrollY != '' && scrollY > 0) {
-    window.scrollTo({top: scrollY, left: "0", behavior: "instant"});
-}
-
+    }else if(indexHome == "/home"){
+        if(scrollY != null && scrollY != '' && scrollY > 0) {
+            window.scrollTo({top: scrollY, left: "0", behavior: "instant"});
+        }
+    }
 });
-function movePage(page){
-    localStorage.setItem("scrolly", scrollY);
-    location.href="./home?pageNo="+page;
+//AutoScroll JS=================================================================================
+$(window).on('popstate', function(event) {
+    var data = event.originalEvent.state; // pushState에서 저장한 state data
+    console.log(data);
+});
+
+function pager(pageNo) {
+    sessionStorage.setItem("cachePage", pageNo);
+    var search = $("#searchPost").val();
+    console.log(search);
+    $.ajax({
+        type: "GET",
+        data: {pageNo: pageNo, search: decodeURIComponent(search)},
+        url: "./posts",
+        success: function (posts) {
+            window.scrollTo({top: 190, left: 0, behavior: "smooth"});
+            if (pageNo == 1 && search == "") {
+                $("#featMain").show();
+                var featPost = posts[0];
+                posts.splice(0, 1);
+                var textHtml = '<p>작성자 : '+featPost.member_name+'</p>' +
+                    '<p>'+featPost.date+'</p>';
+                $("#featMain").find("a").attr("href", "./readpost?post_no="+featPost.no);
+                $("#featMain").find(".text-muted").html(textHtml);
+                $("#featMain").find(".card-title").text(featPost.title);
+                $("#featMain").find(".card-text").text(featPost.text);
+
+                $.each(posts, function (index, item) {
+                    var textHtml = '<p>작성자 : '+item.member_name+'</p>' +
+                        '<p>'+item.date+'</p>';
+                    $("#post"+(index+1)).find("a").attr("href", "./readpost?post_no="+item.no);
+                    $("#post"+(index+1)).find(".text-muted").html(textHtml);
+                    $("#post"+(index+1)).find(".card-title").text(item.title);
+                    $("#post"+(index+1)).find(".card-text").text(item.text);
+                    console.log(index);
+                });
+            } else if(search == ""){
+                $("#featMain").hide();
+                var totalIndex = [];
+                $.each(posts, function (index, item) {
+                    var textHtml = '<p>작성자 : '+item.member_name+'</p>' +
+                        '<p>'+item.date+'</p>';
+                    $("#post"+(index+1)).show();
+                    $("#post"+(index+1)).find("a").attr("href", "./readpost?post_no="+item.no);
+                    $("#post"+(index+1)).find(".text-muted").html(textHtml);
+                    $("#post"+(index+1)).find(".card-title").text(item.title);
+                    $("#post"+(index+1)).find(".card-text").text(item.text);
+
+                    totalIndex.push(index);
+                        console.log(index);
+
+                    }
+                    );
+                var numPosts = totalIndex.length;
+                for(var k = 4; k > numPosts; k--){
+                    $("#post"+k).hide();
+                }
+            }else{
+                $("#featMain").hide();
+                var totalIndex = [];
+                $.each(posts, function (index, item) {
+                        var textHtml = '<p>작성자 : '+item.member_name+'</p>' +
+                            '<p>'+item.date+'</p>';
+                        $("#post"+(index+1)).show();
+                        $("#post"+(index+1)).find("a").attr("href", "./readpost?post_no="+item.no);
+                        $("#post"+(index+1)).find(".text-muted").html(textHtml);
+                        $("#post"+(index+1)).find(".card-title").text(item.title);
+                        $("#post"+(index+1)).find(".card-text").text(item.text);
+
+                        totalIndex.push(index);
+                        console.log(index);
+
+                    }
+                );
+                var numPosts = totalIndex.length;
+                for(var k = 4; k > numPosts; k--){
+                    $("#post"+k).hide();
+                }
+
+            }
+            console.log(posts);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "./pages",
+        data: {pageNo : pageNo, search: search},
+        success: function(pages){
+            var nowPage = pages.nowPage;
+            var maxPage = pages.maxPage;
+            var nowPageCounter = pages.nowPageCounter;
+            $("#ajaxPage").empty();
+            if((maxPage-nowPageCounter) > 10){
+                for (var i = nowPageCounter + 1; i <= nowPageCounter + 10; i++) {
+                    if (i == nowPage) {
+                        var htmlPage = "<li class=\"page-item active\" aria-current=\"page\">" +
+                            "                                    <button type=\"button\" class=\"page-link\" onclick=\"pager(" + i + ")\" >"
+                            + i + "                                        </button>\n" +
+                            "                                </li>"
+                        $("#ajaxPage").append(htmlPage);
+                    } else {
+                        var htmlPage = "<li class=\"page-item\" aria-current=\"page\">" +
+                            "                                    <button type=\"button\" class=\"page-link\" onclick=\"pager(" + i + ")\" >"
+                            + i + "                                        </button>\n" +
+                            "                                </li>"
+                        $("#ajaxPage").append(htmlPage);
+                    }
+                }
+            }else{
+                for (var i = nowPageCounter + 1; i <= maxPage; i++) {
+                    if (i == nowPage) {
+                        var htmlPage = "<li class=\"page-item active\" aria-current=\"page\">" +
+                            "                                    <button type=\"button\" class=\"page-link\" onclick=\"pager(" + i + ")\" >"
+                            + i + "                                        </button>\n" +
+                            "                                </li>"
+                        $("#ajaxPage").append(htmlPage);
+                    } else {
+                        var htmlPage = "<li class=\"page-item\" aria-current=\"page\">" +
+                            "                                    <button type=\"button\" class=\"page-link\" onclick=\"pager(" + i + ")\" >"
+                            + i + "                                        </button>\n" +
+                            "                                </li>"
+                        $("#ajaxPage").append(htmlPage);
+
+                    }
+                }
+            }
+
+            if((maxPage-nowPageCounter) > 10){
+                var htmlPageNext = "<li class=\"page-item\" aria-current=\"page\">" +
+                    "<button type=\"button\" class=\"page-link\" onclick=\"pager("+(nowPageCounter+11)+ ")\">" +
+                    "<i class=\"fas fa-angle-right\"></i></button></li>\n"
+                $("#ajaxPage").append(htmlPageNext);
+            }
+            if(nowPage > 10){
+                var htmlPagePrev = "<li class=\"page-item\" aria-current=\"page\">" +
+                    "<button type=\"button\" class=\"page-link\" onclick=\"pager("+nowPageCounter+ ")\" >" +
+                    "<i class=\"fas fa-angle-left\"></i></button></li>\n"
+                $("#ajaxPage").prepend(htmlPagePrev);
+            }
+        }
+    });
 }
+//Home Pager JS==================================================================================
+
+
+
+

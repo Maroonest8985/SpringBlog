@@ -16,7 +16,7 @@
         where post_no = #{post_no} order by date desc;
     </select>
 
-    <select id="getCommentNo" resultType="Long">
+    <select id="getCommentNo" resultType="Integer">
         select LAST_INSERT_ID() as comment_no;
     </select>
     <select id="getCommentCount">

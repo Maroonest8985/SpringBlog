@@ -5,16 +5,22 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Repository
 @Mapper
+
 public interface PostDAO {
-   public void insertPost(PostDTO postDTO);
-   public PostDTO selectPost(int no);
-   public ArrayList<PostDTO> getListPost();
-   public int getRows(int limit, int contentNo);
-   public void deletePost(String post_no);
-   public void updatePost(PostDTO postDTO);
-   public int checkDeletePost(String post_no, String member_no);
+   void insertPost(PostDTO postDTO);
+   PostDTO selectPost(int no);
+   int getRows();
+   ArrayList<PostDTO> getListPostPage(Map<String, Integer> map);
+   int deletePost(Map<String, Integer> map);
+   int updatePost(PostDTO postDTO);
+   ArrayList<PostDTO> getListSearchPost(String search, int limit, int contentNo);
+   int getSearchRows(String search);
+   String getMemberName(int member_no);
 }
+

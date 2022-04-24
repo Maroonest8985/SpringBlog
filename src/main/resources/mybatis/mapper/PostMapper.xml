@@ -11,14 +11,6 @@
         (#{title}, #{text}, #{img}, #{member_no}, CURRENT_TIMESTAMP);
     </insert>
 
-    <select id="getListPost" resultType="com.example.demo123.DTO.PostDTO">
-        select post.*, member.id as member_name from post
-         left join member on post.member_no = member.no order by post.no desc;
-    </select>
-
-    <select id="checkDeletePost" resultType="int">
-        select count(*) from post where member_no = #{member_no} and no = #{post_no};
-    </select>
 
     <select id="getListPostPage" resultType="com.example.demo123.DTO.PostDTO">
         select post.*, member.id as member_name,
@@ -27,6 +19,16 @@
         limit #{limit}, #{contentNo};
     </select>
 
+    <select id="getListSearchPost" resultType="com.example.demo123.DTO.PostDTO">
+        select post.*, member.id as member_name,
+               (select count(*) from comment where post_no=post.no) as comment from post
+               left join member on post.member_no = member.no where title like CONCAT('%', #{search}, '%') order by post.no desc
+            limit #{limit}, #{contentNo};
+    </select>
+
+    <select id="getSearchRows" resultType="int">
+        select count(*) from post where title like CONCAT('%', #{search}, '%');
+    </select>
 
     <select id="selectPost" resultType="com.example.demo123.DTO.PostDTO">
         select post.*, member.id as member_name from post

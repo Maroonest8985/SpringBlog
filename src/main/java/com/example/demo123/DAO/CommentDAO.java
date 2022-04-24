@@ -7,11 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
 public interface CommentDAO {
     public void addComment(CommentDTO commentDTO);
-    public void deleteComment();
-    public ArrayList<CommentDTO> getComment(String post_no);
+    public int deleteComment(Map<String, Integer> map);
+    public ArrayList<CommentDTO> getComment(Map<String, Integer> map);
+    public int getCommentNo();
 }

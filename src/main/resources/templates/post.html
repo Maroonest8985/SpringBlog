@@ -33,7 +33,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col">
-                                    <a href="javascript:history.back();" class="btn btn-secondary">목록</a>
+                                    <button id = "back" onclick="javascript:history.back()" class="btn btn-secondary" type="button">목록</button>
                                     <a th:href="@{./editpost(post_no=${post_no})}" th:if="${session.member_id} == ${member_name}" id="postModify" class="btn btn-primary">수정</a>
                                     <a th:if="${session.member_id} == ${member_name}" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" id="postDelete" class="btn btn-danger">삭제</a>
                                 </div>
