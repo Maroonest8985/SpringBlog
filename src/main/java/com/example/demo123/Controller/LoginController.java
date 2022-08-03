@@ -25,8 +25,7 @@ public class LoginController{
     private SqlSessionFactory sqlSessionFactory;
 
     @PostMapping("/login")
-    public ModelAndView login(LoginDAO loginDAO, HttpSession session, HttpServletRequest request){
-        LoginDTO loginDTO = new LoginDTO();
+    public ModelAndView login(HttpSession session, HttpServletRequest request){
         MemberDTO memberDTO = new MemberDTO();
         String id = request.getParameter("id");
         String pwd = request.getParameter("pwd");
@@ -63,7 +62,7 @@ public class LoginController{
 
     @PostMapping("/checklogin") //for login ajax checking
     @ResponseBody
-    public int checklogin(HttpServletRequest request){
+    public int checklogin(HttpServletRequest request, HttpSession session){
         MemberDTO memberDTO = new MemberDTO();
         String id = request.getParameter("userid");
         String pwd = request.getParameter("password");
@@ -80,6 +79,14 @@ public class LoginController{
         }
 
         if(memberDTO != null){
+            int m_no = memberDTO.getNo();
+            String m_id = memberDTO.getId();
+            String m_email = memberDTO.getEmail();
+            String m_pwd = memberDTO.getPwd();
+            session.setAttribute("member_id", m_id);
+            session.setAttribute("member_no", m_no);
+            session.setAttribute("member_email", m_email);
+            session.setAttribute("member_pwd", m_pwd);
             return 1;
         }else{
             return 0;

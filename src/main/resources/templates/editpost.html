@@ -5,7 +5,11 @@
 
 <th:block layout:fragment="content">
         <!-- Page content-->
-        <div class="container container-post">
+    <script>
+        $("img").attr("style", "max-width : 100%");
+    </script>
+
+    <div class="container container-post">
             <div class="row">
                 <div class="col-lg-12">
                     <!-- Post content-->
@@ -29,7 +33,9 @@
                             </div>
                         <!-- Post content-->
                         <section class="mb-5">
-                            <textarea name="text" th:utext="${text}" id="postText" class="form-control" rows="20" placeholder="내용을 작성하세요." required></textarea>
+                            <div contenteditable="true" th:utext="${text}" id="postTextDiv" class="form-control post-div"></div>
+                            <textarea name="text" id="postText" style="display: none" required></textarea>
+
                         </section>
                             <div class="row float-end">
                                 <div class="col">

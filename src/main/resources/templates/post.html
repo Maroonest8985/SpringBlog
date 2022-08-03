@@ -3,11 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-
 <th:block layout:fragment="content">
-<script>
-
-</script>
     <!-- Page content-->
         <div class="container mt-5">
             <div class="row">
@@ -26,9 +22,8 @@
                             <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
                         </header>
                         <!-- Preview image figure-->
-                        <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
                         <!-- Post content-->
-                        <section class="mb-5">
+                        <section class="mb-5" id="postArticle">
                             <p th:utext="${text}" class="fs-5 mb-4"></p> <!----------th:utext : parsing html---------->
                             <hr>
                             <div class="row">

@@ -17,18 +17,30 @@
     <div class="container">
         <div>
             <a id="homeBtn" class="navbar-brand" href="./home">Maroonest's BLOG</a>
-            <a id="darkmodeBtn" class="btn-darkmode"><i class="fas fa-moon"></i></a>
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="ms-auto hstack">
+            <a id="darkmodeBtn" class="btn btn-sm mx-1 btn-darkmode"><i class="fas fa-moon"></i></a>
+            <a href="#" id="searchButton" style="width : 32px" data-bs-toggle="modal" data-bs-target="#searchModal" class="btn btn-light rounded-pill btn-sm mx-1"><i class="fas fa-search"></i></a>
+            <a th:if="${session.member_no}" style="width : 32px" id="navbarPost" class="btn btn-light rounded-pill btn-sm mx-1" href="./newpost"><i class="fas fa-pencil-alt"></i></a>
+            <div th:if="${session.member_id}" class="dropdown">
+                <a class="btn btn-light rounded-pill btn-sm mx-1" style="width : 32px" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" style="text-align: center; left : -200%;" aria-labelledby="dropdownMenuButton1">
+                    <li>ID : [[${session.member_id}]]</li>
+                    <li><a class="" href="./memberinfo">정보</a></li>
+                    <li><a class="link-danger" href="./logout">로그아웃</a></li>
+                </ul>
+            </div>
+            <a th:unless="${session.member_id}" id="navbarLogin" class="btn btn-light rounded-pill btn-sm mx-1" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+            <button class="navbar-toggler ms-1 rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i></button>
+        </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li th:if="${session.member_id}" class="nav-item"><a class="nav-link" href="./memberinfo">Welcome, [[${session.member_id}]]</a></li>
-                <li th:if="${session.member_id}" class="nav-item"><a class="nav-link" href="./logout">Logout</a></li>
-                <li th:if="!${session.member_id}" class="nav-item"><a id="navbarLogin" class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
                 <li class="nav-item"><a id="navbarHome" class="nav-link" href="./home">Home</a></li>
                 <li class="nav-item"><a id="navbarAbout"  class="nav-link" href="./about">About</a></li>
-                <li class="nav-item"><a id="navbarContact" class="nav-link" href="./contact">Contact</a></li>
-                <li th:if="${session.member_no}" class="nav-item"><a id="navbarPost" class="nav-link" href="./newpost">Post</a></li>
+                <li class="nav-item"><a id="navbarContact" class="nav-link" href="./chat">Chat</a></li>
             </ul>
         </div>
         </div>
@@ -62,7 +74,6 @@
             </div>
             <div class="modal-footer">
                 <div id="loginMsg">
-
                 </div>
                 <button id="btnSignup" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#staticBackdrop">Sign Up</button>
                 <button id="btnSignin" type="button" class="btn btn-primary">Login</button>
@@ -114,5 +125,21 @@
         </div>
     </div>
 </div>
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input id="searchPost" type="text" class="form-control" placeholder="검색어를 입력하세요.">
+                        <button class="btn btn-outline-secondary" id="searchSubmit" data-bs-dismiss="modal" onclick="pager(1)"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </th:block>
 </html>

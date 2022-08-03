@@ -43,13 +43,13 @@ public class HomeController {
         }
         int maxPage = 0;////총 페이지 갯수 -> getRows 나누기 contentNo의 몫
         int contentNo = 4;//페이지에 표시될 항목 갯수;
-        if(search =="") {
+        if(search == "") {
             try {
-                maxPage = postDAO.getRows();
-                if ((maxPage - 1) % contentNo == 0) { //63 4 몫 15 나머지가 3
-                    maxPage = (maxPage / contentNo); //게시글이 4의배수로 떨어질 때 추가 페이지 생성x
+                maxPage = postDAO.getRows();//66
+                if ((maxPage - 1) % contentNo == 0) { //67 % 4 = 0
+                    maxPage = ((maxPage-1) / contentNo); // 65 / 4 = 16
                 } else {
-                    maxPage = (maxPage / contentNo) + 1;//최대 페이지 갯수
+                    maxPage = ((maxPage-1) / contentNo) + 1;//67 / 4 = 16 총 17페이지
                 }
             } catch (SqlSessionException e) {
                 e.printStackTrace();
@@ -66,14 +66,6 @@ public class HomeController {
                 e.printStackTrace();
             }
         }
-        //만약 nowPage가 15야
-        //maxPage가 19개고
-        //그럼 PageCounter는 1이야
-        //그럼 newer는 5야
-        //그럼 nowPageCounter는 10이야
-        //그럼 nowPageCounter에서부터 19까지 나와야돼
-        //그럼 if(maxPage-nowPageCounter가 10보다 작으면) 이후 버튼이 안나와
-        //pageCOunter는 1~10일때 0, 11~19일때 1 20~29일때 2
         int pageCounter = (nowPage)/10; //10단위 페이지 -
         if(nowPage == 10){
             pageCounter = 0;
@@ -83,7 +75,6 @@ public class HomeController {
         pageDTO.setNowPage(nowPage);
         pageDTO.setMaxPage(maxPage);
         pageDTO.setNowPageCounter(nowPageCounter);
-
         return pageDTO;
     }
 
@@ -100,17 +91,10 @@ public class HomeController {
         if(request.getParameter("search") != null){
             search = request.getParameter("search");
         }
-        int maxPage = 0;////총 페이지 갯수 -> getRows 나누기 contentNo의 몫
         int contentNo = 4;//페이지에 표시될 항목 갯수;
         int limit = ((nowPage-1)*contentNo)+1;
         if(search == "") {
             try {
-                maxPage = postDAO.getRows();
-                if ((maxPage - 1) % contentNo == 0) {
-                    maxPage = (maxPage / contentNo); //게시글이 4의배수로 떨어질 때 추가 페이지 생성x
-                } else {
-                    maxPage = (maxPage / contentNo) + 1;//최대 페이지 갯수
-                }
                 Map<String, Integer> map = new HashMap<String, Integer>();
                 Map<String, Integer> featMap = new HashMap<String, Integer>();
                 if (nowPage == 1) {
@@ -137,19 +121,10 @@ public class HomeController {
             }
         }
         List<PostDTO> post = new ArrayList<>();
-        post.addAll(arrPostDTO);
         if(featPostDTO != null) {
             post.addAll(featPostDTO);
         }
-
-        //만약 nowPage가 15야
-        //maxPage가 19개고
-        //그럼 PageCounter는 1이야
-        //그럼 newer는 5야
-        //그럼 nowPageCounter는 10이야
-        //그럼 nowPageCounter에서부터 19까지 나와야돼
-        //그럼 if(maxPage-nowPageCounter가 10보다 작으면) 이후 버튼이 안나와
-        //pageCOunter는 1~10일때 0, 11~19일때 1 20~29일때 2
+        post.addAll(arrPostDTO);
         return post;
     }
 

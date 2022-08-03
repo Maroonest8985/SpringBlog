@@ -47,7 +47,7 @@
 
     <update id="updatePost">
         update post set title=#{title}, text=#{text},
-        img=#{img}, date=CURRENT_TIMESTAMP where no=#{post_no} and member_no=#{member_no};
+        img=#{img} where no=#{post_no} and member_no=#{member_no};
     </update>
 
     <select id="getMemberName" resultType="String">

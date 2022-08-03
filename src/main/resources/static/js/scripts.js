@@ -1,5 +1,8 @@
 $(function(){
 
+    if(!sessionStorage.getItem("cachePage")){
+        sessionStorage.setItem("cachePage", 1);
+    }
     $("#homeBtn").click(function (){
         sessionStorage.setItem("cachePage", 1);
     })
@@ -20,6 +23,7 @@ $(function(){
         $("#navbarContact").addClass("active");
     }else if(index.indexOf("post") != -1){
         $("#navbarPost").addClass("active");
+        $("img").attr("style", "max-width : 100%");
     }else {
         $("#navbarHome").addClass("active");
     }
@@ -37,6 +41,9 @@ $(function(){
             $("label").each(function () {
                 $(this).addClass("input-font-darkmode");
             });
+            if($("section")){
+                $("#postArticle").find("p, h1, h2, h3, h4, h5").css("color", "white");
+            }
             $(".card").each(function () {
                 $(this).toggleClass("card-darkmode");
                 $(this).toggleClass("card-lightmode");
@@ -57,6 +64,9 @@ $(function(){
             $("label").each(function(){
                 $(this).addClass("input-font-darkmode", 200, "swing");
             });
+            if($("section")){
+                $("#postArticle").find("p, h1, h2, h3, h4, h5").css("color", "white");
+            }
             $(".modal-content").toggleClass("modal-darkmode font-darkmode");
             $("#darkmodeBtn").toggleClass("active", 200, "swing");
             $(".card").each(function() {
@@ -71,6 +81,9 @@ $(function(){
             $("label").each(function(){
                 $(this).removeClass("input-font-darkmode", 200, "swing");
             });
+            if($("section")) {
+                $("#postArticle").find("p, h1, h2, h3, h4, h5").css("color", "black");
+            }
             $(".modal-content").toggleClass("modal-darkmode font-darkmode");
             $(".card").each(function() {
                 $(this).toggleClass("card-darkmode", 100, "swing");
@@ -186,6 +199,8 @@ $(function(){
 
     //Sign Up JS=================================================================================
 
+
+
     $("#btnSignin").click(function(){
         var id = $("#loginIdInput").val();
         var pwd = $("#loginPwdInput").val();
@@ -288,24 +303,50 @@ function pager(pageNo) {
         url: "./posts",
         success: function (posts) {
             window.scrollTo({top: 190, left: 0, behavior: "smooth"});
+
             if (pageNo == 1 && search == "") {
                 $("#featMain").show();
                 var featPost = posts[0];
                 posts.splice(0, 1);
                 var textHtml = '<p>작성자 : '+featPost.member_name+'</p>' +
                     '<p>'+featPost.date+'</p>';
+                var featPostText = (featPost.text).replace(/(<([^>]+)>)/ig, "");
+                featPostText = featPostText.replace(/&nbsp;/gi, "");
                 $("#featMain").find("a").attr("href", "./readpost?post_no="+featPost.no);
                 $("#featMain").find(".text-muted").html(textHtml);
                 $("#featMain").find(".card-title").text(featPost.title);
-                $("#featMain").find(".card-text").text(featPost.text);
+                $("#featMain").find(".card-text").text(featPostText);
+                var imgF = featPost.text;
+                var img = imgF.split("<img src=\"");
+                if(imgF.includes("img src") == true){
+                    img = img[1];
+                    img = img.split('\"');
+                    img = img[0];
+                    $("#featMain").find(".card-img-top").attr("src", img);
+                }else{
+                    $("#featMain").find(".card-img-top").attr("src", "https://dummyimage.com/850x350/dee2e6/6c757d.jpg");
+                }
 
                 $.each(posts, function (index, item) {
                     var textHtml = '<p>작성자 : '+item.member_name+'</p>' +
                         '<p>'+item.date+'</p>';
+                    var imgP = item.text;
+                    var img = imgP.split("<img src=\"");
+                    if(imgP.includes("img src") == true){
+                        img = img[1];
+                        img = img.split('\"');
+                        img = img[0];
+                        $("#post"+(index+1)).find(".card-img-top").attr("src", img);
+                    }else{
+                        $("#post"+(index+1)).find(".card-img-top").attr("src", "https://dummyimage.com/850x350/dee2e6/6c757d.jpg");
+                    }
+
+                    var itemText = (item.text).replace(/(<([^>]+)>)/ig, "");
+                    itemText = itemText.replace(/&nbsp;/gi, "");
                     $("#post"+(index+1)).find("a").attr("href", "./readpost?post_no="+item.no);
                     $("#post"+(index+1)).find(".text-muted").html(textHtml);
                     $("#post"+(index+1)).find(".card-title").text(item.title);
-                    $("#post"+(index+1)).find(".card-text").text(item.text);
+                    $("#post"+(index+1)).find(".card-text").text(itemText);
                     console.log(index);
                 });
             } else if(search == ""){
@@ -314,11 +355,24 @@ function pager(pageNo) {
                 $.each(posts, function (index, item) {
                     var textHtml = '<p>작성자 : '+item.member_name+'</p>' +
                         '<p>'+item.date+'</p>';
-                    $("#post"+(index+1)).show();
-                    $("#post"+(index+1)).find("a").attr("href", "./readpost?post_no="+item.no);
-                    $("#post"+(index+1)).find(".text-muted").html(textHtml);
-                    $("#post"+(index+1)).find(".card-title").text(item.title);
-                    $("#post"+(index+1)).find(".card-text").text(item.text);
+                        var imgP = item.text;
+                        var img = imgP.split("<img src=\"");
+                        if(imgP.includes("img src") == true){
+                            img = img[1];
+                            img = img.split('\"');
+                            img = img[0];
+                            $("#post"+(index+1)).find(".card-img-top").attr("src", img);
+                        }else{
+                            $("#post"+(index+1)).find(".card-img-top").attr("src", "https://dummyimage.com/850x350/dee2e6/6c757d.jpg");
+                        }
+
+                        var itemText = (item.text).replace(/(<([^>]+)>)/ig, "");
+                        itemText = itemText.replace(/&nbsp;/gi, "");
+                        $("#post"+(index+1)).show();
+                        $("#post"+(index+1)).find("a").attr("href", "./readpost?post_no="+item.no);
+                        $("#post"+(index+1)).find(".text-muted").html(textHtml);
+                        $("#post"+(index+1)).find(".card-title").text(item.title);
+                        $("#post"+(index+1)).find(".card-text").text(itemText);
 
                     totalIndex.push(index);
                         console.log(index);
@@ -335,15 +389,26 @@ function pager(pageNo) {
                 $.each(posts, function (index, item) {
                         var textHtml = '<p>작성자 : '+item.member_name+'</p>' +
                             '<p>'+item.date+'</p>';
+                    var imgP = item.text;
+                    var img = imgP.split("<img src=\"");
+                    if(imgP.includes("img src") == true){
+                        img = img[1];
+                        img = img.split('\"');
+                        img = img[0];
+                        $("#post"+(index+1)).find(".card-img-top").attr("src", img);
+                    }else{
+                        $("#post"+(index+1)).find(".card-img-top").attr("src", "https://dummyimage.com/850x350/dee2e6/6c757d.jpg");
+                    }
+
+                    var itemText = (item.text).replace(/(<([^>]+)>)/ig, "");
+                        itemText = itemText.replace(/&nbsp;/gi, "");
                         $("#post"+(index+1)).show();
                         $("#post"+(index+1)).find("a").attr("href", "./readpost?post_no="+item.no);
                         $("#post"+(index+1)).find(".text-muted").html(textHtml);
                         $("#post"+(index+1)).find(".card-title").text(item.title);
-                        $("#post"+(index+1)).find(".card-text").text(item.text);
-
+                        $("#post"+(index+1)).find(".card-text").text(itemText);
                         totalIndex.push(index);
                         console.log(index);
-
                     }
                 );
                 var numPosts = totalIndex.length;
@@ -416,6 +481,19 @@ function pager(pageNo) {
     });
 }
 //Home Pager JS==================================================================================
+$(function(){
+    $("body").on("DOMSubtreeModified", "#postTextDiv", function (){
+        $("img").attr("style", "max-width : 100%");
+        var text = $("#postTextDiv").html();
+        $("#postText").val(text);
+    });
+
+    $("#posts .card").hover(
+        function(){$(this).css({"transform" : "scale(1.03)", "transition" : ".7s"});
+            },
+        function(){$(this).css({"transform" : "scale(1.0)", "transition" : ".7s"});
+        });
+})
 
 
 

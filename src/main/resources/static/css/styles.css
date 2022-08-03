@@ -498,6 +498,8 @@ progress {
   font-weight: 300;
   line-height: 1.2;
 }
+
+
 @media (min-width: 1200px) {
   .display-1 {
     font-size: 5rem;
@@ -641,6 +643,21 @@ progress {
 .figure-caption {
   font-size: 0.875em;
   color: #6c757d;
+}
+
+.post-div{
+  background-color: white;
+  height: 400px;
+  overflow: scroll;
+}
+.post-div > span{
+  max-width: 100%;
+}
+
+@media (max-width: 768px){
+  .post-div{
+    height : 300px;
+  }
 }
 
 .container,
@@ -4070,8 +4087,7 @@ textarea.form-control-lg {
 .navbar-brand {
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;
-  margin-right: 1rem;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -4274,6 +4290,7 @@ textarea.form-control-lg {
   .navbar-expand-lg .navbar-collapse {
     display: flex !important;
     flex-basis: auto;
+    max-width: fit-content;
   }
   .navbar-expand-lg .navbar-toggler {
     display: none;
@@ -11349,4 +11366,9 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+}
+
+[contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
 }
